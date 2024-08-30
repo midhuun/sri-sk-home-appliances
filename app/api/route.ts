@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { NextResponse } from 'next/server';
 
-export async function GET(req) {
+export async function GET(req:Request):Promise<Response> {
     try {
         await mongoose.connect("mongodb+srv://subash:sakthiMass@adminpanel.ykhyo.mongodb.net/?retryWrites=true&w=majority&appName=AdminPanel");
         console.log("Database connected successfully");
