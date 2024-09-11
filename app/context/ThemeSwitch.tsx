@@ -13,10 +13,10 @@ export default function ThemeSwitch(){
     return null
   }
   if(resolvedTheme ==='dark'){
-    return <FiSun onClick={() => setTheme('light')} />
+    return <FiSun className="cursor-pointer" onClick={() => setTheme('light')} />
   }
   if(resolvedTheme ==='light'){
-    return <FiMoon onClick={() => setTheme('dark')} />
+    return <FiMoon className="cursor-pointer" size={28} onClick={() => setTheme('dark')} />
   }
   
 }
