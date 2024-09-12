@@ -5,9 +5,7 @@ const categorySchema = new mongoose.Schema({
     description:{type:String},
     subcategories:[{type:Schema.Types.ObjectId,ref:'Subcategory'}]
 });
-const Category = mongoose.models.Category || mongoose.model("Category",categorySchema)
-module.exports = Category
-
+export const Category = mongoose.models.Category || mongoose.model("Category",categorySchema)
 const subCategorySchema = new mongoose.Schema({
     name:{type:String,required:true},
     description:{type:String,required:true},
@@ -16,8 +14,8 @@ const subCategorySchema = new mongoose.Schema({
         {type:Schema.Types.ObjectId,ref:"Products"}
     ]
 })
-const subCategory = mongoose.models.subCategory || mongoose.model("subCategory",subCategorySchema);
-module.exports = subCategory;
+export const subCategory = mongoose.models.subCategory || mongoose.model("subCategory",subCategorySchema);
+
 
 const productSchema = new mongoose.Schema({
     name:{type:String,required:true},
@@ -29,5 +27,5 @@ const productSchema = new mongoose.Schema({
     stock:{type:Number,required:true},
     subcategory:{type:Schema.Types.ObjectId,ref:"SubCategory"}
 })
-const Product = mongoose.models.Product || mongoose.model("Product",productSchema)
-module.exports = Product;
+export const Product = mongoose.models.Product || mongoose.model("Product",productSchema)
+

@@ -6,6 +6,7 @@ const UserSchema = new Schema({
     mobile:{type:String,unique:true},
     email:{type:String,unique:true},
     password:{type:String,required:true,min:8},
+    creationDate:{type:Date,default:Date.now()},
     cartItems: [{
         product: { type: Schema.Types.ObjectId, ref: "Product" },
         quantity: { type: Number, required: true, min: 1 }  

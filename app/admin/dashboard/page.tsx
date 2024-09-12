@@ -1,16 +1,10 @@
-import React from 'react'
 
-const page = () => {
+const Page = () => { 
   return (
-    <div className='min-h-screen ' >
-     <form action="">
-      <input className='border' type="text" name="name" placeholder='Enter your Name' id="" />
-      <input className='border' type="text" name="name" placeholder='Enter your Mobile' id="" />
-      <input className='border' type="text" name="name" placeholder='Enter your Email' id="" />
-      <input className='border' type="text" name="name" placeholder='Enter your Password' id="" />
-     </form>
+    <div className='min-h-screen w-full text-center' >
+        
     </div>
   )
 }
 
-export default page
+export default Page;

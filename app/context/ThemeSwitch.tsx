@@ -2,7 +2,8 @@
 import { useEffect,useState } from "react";
 import { useTheme } from "next-themes";
 import Image from "next/image";
-import { FiMoon, FiSun } from "react-icons/fi";
+import { LuSunMoon } from "react-icons/lu";
+import { WiMoonAltWaningGibbous6 } from "react-icons/wi";
 export default function ThemeSwitch(){
     const [mounted, setMounted] = useState<Boolean>();
     const { setTheme, resolvedTheme } = useTheme()
@@ -13,10 +14,10 @@ export default function ThemeSwitch(){
     return null
   }
   if(resolvedTheme ==='dark'){
-    return <FiSun className="cursor-pointer" onClick={() => setTheme('light')} />
+    return <LuSunMoon className="cursor-pointer" size={28} onClick={() => setTheme('light')} />
   }
   if(resolvedTheme ==='light'){
-    return <FiMoon className="cursor-pointer" size={28} onClick={() => setTheme('dark')} />
+    return <WiMoonAltWaningGibbous6 className="cursor-pointer" size={28} onClick={() => setTheme('dark')} />
   }
   
 }
