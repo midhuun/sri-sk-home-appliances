@@ -1,6 +1,6 @@
 import React from 'react'
 
-const page = () => {
+const Page = () => {
   return (
     <div className='bg-[#bcbbbb]'>
       
@@ -8,4 +8,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

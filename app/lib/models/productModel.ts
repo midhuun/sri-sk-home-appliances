@@ -2,12 +2,14 @@ import mongoose, { Schema } from "mongoose";
 
 const categorySchema = new mongoose.Schema({
     name:{type:String,required:true},
+    image:{type:String,required:true},
     description:{type:String},
     subcategories:[{type:Schema.Types.ObjectId,ref:'Subcategory'}]
 });
 export const Category = mongoose.models.Category || mongoose.model("Category",categorySchema)
 const subCategorySchema = new mongoose.Schema({
     name:{type:String,required:true},
+    image:{type:String,required:true},
     description:{type:String,required:true},
     category:{type:Schema.Types.ObjectId,ref:'Category'},
     products:[
@@ -19,6 +21,7 @@ export const subCategory = mongoose.models.subCategory || mongoose.model("subCat
 
 const productSchema = new mongoose.Schema({
     name:{type:String,required:true},
+    image:{type:String,required:true},
     description:{type:String,required:true},
     price:{type:Number,required:true},
     colors:[
