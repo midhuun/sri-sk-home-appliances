@@ -6,7 +6,6 @@ import { IoBagHandle } from "react-icons/io5";
 import { RiUser3Fill } from "react-icons/ri";
 import { usePathname } from 'next/navigation'
 import Link from "next/link";
-import clsx from 'clsx';
 type Links ={
   id:any
   name:String,
@@ -39,12 +38,12 @@ const links:Links[] =[
     icon:<RiUser3Fill size={24} />
   }
 ]
-const Links = () => {
+const Links = ({navopen}:any) => {
+     console.log(navopen);
     const params = usePathname();
-   const path =params.substring(7)
-    
+    const path =params.substring(7)
   return (
-    <div className="fixed dark:text-[#E0E0E0] dark:bg-[#181C14] dark:border-gray-800 left-0 top-[80px]  z-[50] bg-white w-[200px] flex flex-col min-h-screen border-r">
+    <div className={`fixed dark:text-[#E0E0E0] ${navopen?"left-0":"left-[-100%]"} dark:bg-[#181C14] dark:border-gray-800  lg:left-0 transition duration-500 top-[80px]  z-[50] bg-white w-[200px] flex flex-col min-h-screen border-r`}>
     {links.map((link:Links)=> <Link href={`/admin/${link.id}`}  key={link.id} className={`cursor-pointer flex transition duration-300 hover:bg-[#2f88fb] px-2 h-[50px] w-full hover:text-white items-center gap-5 ${path === link.id && 'bg-[#2f88fb] text-white' }`}>
       {link.icon}
       <p className='font-semibold'>{link.name}</p>
