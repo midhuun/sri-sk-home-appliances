@@ -1,39 +1,10 @@
-import { ConnectToDB } from '@/app/lib/db';
-import { Category } from '@/app/lib/models/productModel';
+import { Category, Product, SubCategory } from '@/app/lib/models/productModel';
 import { NextResponse } from 'next/server';
-ConnectToDB();
-export async function GET(req:Request):Promise<Response> {
-    
-    return NextResponse.json({ message:"Success"});
-}
-export async function POST(req:Request): Promise<Response> {
 
-    const formDatas = await req.formData();
-    console.log(formDatas);
-    
-    const timeStamp = Date.now();
-    
-    const image:any = formDatas.get('image');
-    const form = new FormData();
-    form.append('image',image);
-    try{
-    const data = await fetch('https://api.imgbb.com/1/upload?key=f3145a10e034400f4b912f8123f851b1',{
-        method:'POST',
-        body:form
-    })
-    const result =await data.json();
-    const imgUrl = result.data.display_url;
+ export async function GET(req:Request):Promise<Response> {
+    const categories = await Category.find().select('-earnings -total');
+    const subcategories = await SubCategory.find().select('-earnings -total');
+    const product = await Product.find().select('-earnings -instock -originalPrice');
+    return NextResponse.json({ message:{categories,subcategories,product}},{status:200});
 
-    // const imageByteData = await image.arrayBuffer();
-    // const buffer = Buffer.from(imageByteData);
-    // const path = `./public/${timeStamp}_${image.name}`;
-    // await writeFile(path,buffer);
-    // const imgurl = `/${timeStamp}_${image.name}`
-    // console.log(imgurl);
-    return NextResponse.json({ message:"Hello"});
-}
-catch(err){
-    console.log(err);
-    return NextResponse.json({ message:"Uploading Failed"});
-}
-}
+ }

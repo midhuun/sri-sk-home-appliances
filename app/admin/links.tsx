@@ -1,6 +1,7 @@
 'use client';
 import { MdSpaceDashboard } from "react-icons/md";
 import { BiSolidCollection } from "react-icons/bi";
+import { MdCategory } from "react-icons/md";
 import { BiSolidCategory } from "react-icons/bi";
 import { IoBagHandle } from "react-icons/io5";
 import { RiUser3Fill } from "react-icons/ri";
@@ -28,6 +29,11 @@ const links:Links[] =[
     icon:<BiSolidCategory size={24} />
   },
   {
+    id:"subcategories",
+    name:"SubCategories",
+    icon:<BiSolidCategory size={24} />
+  },
+  {
     id:"orders",
     name:"Orders",
     icon:<IoBagHandle size={24} />
@@ -39,7 +45,6 @@ const links:Links[] =[
   }
 ]
 const Links = ({navopen}:any) => {
-     console.log(navopen);
     const params = usePathname();
     const path =params.substring(7)
   return (

@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* From Uiverse.io by alexruix */ 
+.custom-select {
+  @apply border dark:bg-[#23271e] text-[14px] px-2 appearance-none p-2 rounded-md w-full placeholder:text-slate-300 dark:placeholder:text-slate-300;
+  max-height: 200px; /* Set the desired maximum height */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
