@@ -2,24 +2,24 @@
 import { useState } from "react";
 import { IoAddOutline } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
-import useSWR,{mutate} from "swr";
+import useSWR from "swr";
 import { Category, Product, SubCategory } from '@/app/types/ProductType';
 import Loading from "@/app/components/Loading";
 import Error from "@/app/components/Error";
 import { RiDeleteBin7Fill } from "react-icons/ri";
-
 const Product = () => {
   const [iscategoryAdd, setiscategoryAdd] = useState(false);
   const [isLoading, setisLoading] = useState(false);
   const [name, setName] = useState("");
   const [stock,setStock] = useState<number|undefined>(undefined);
-  const [file, setFile] = useState<File | undefined>(undefined); // Handle file state
+  const [file, setFile] = useState<any>(undefined); // Handle file state
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState<number|undefined>(undefined);
   const [subcategoryId, setsubcategoryId] = useState("");
   const [colors, setColors] = useState<string[]>([""]); // Initialize with one empty color input
   const [errors, setErrors] = useState<{ [key: string]: string }>({}); // Error state
   const [actualPrice,setactualPrice] = useState<number|undefined>(undefined);
+  const [isAdded,setisAdded] = useState(false);
   const fetcher = (url: any) => fetch(url).then((res) => res.json());
   const { data, error } = useSWR("/api/admin", fetcher);
   async function deleteCategory(id:any){
@@ -31,15 +31,13 @@ const Product = () => {
       body:JSON.stringify({"product":id})
     })
     const result = await res.json();
-    mutate('/api/admin');
     setisLoading(false)
+    window.location.reload();
     console.log(result);
   } 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setisLoading(true);
-
-    // Validation
     const newErrors: { [key: string]: string } = {};
     if (!name) newErrors.name = "Name is required";
     if (!file) newErrors.file = "File is required";
@@ -48,17 +46,16 @@ const Product = () => {
     if (colors.some(color => !color)) newErrors.colors = "All colors must be filled";
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      setisLoading(false);
       return;
     }
-
+    
     const formData:any = new FormData();
     formData.append("name", name);
-    if (file) formData.append("file", file); // Append the file
+    if (file) formData.append("file",file); // Append the file
     formData.append("description", description);
-    formData.append("colors", JSON.stringify(colors)); // Append colors
+    formData.append("colors", colors); // Append colors
     formData.append("price",price)
-    formData.append("subcategory",subcategoryId)
+    formData.append("subcategoryProduct",subcategoryId)
     formData.append("actualPrice",actualPrice)
     formData.append("stock",stock)
     const response = await fetch('/api/admin', {
@@ -67,7 +64,11 @@ const Product = () => {
     });
     const results = await response.json();
     console.log(results);
-    setisLoading(false);
+    window.location.reload();
+    setisLoading(true);
+    setTimeout(() => {
+      setisLoading(false);
+    }, 2000);
   };
 
   if (error) return <Error />;
@@ -109,7 +110,7 @@ const Product = () => {
                accept=".jpg"
                multiple
               className={`border text-[14px] p-0 rounded-md w-full file:bg-white file:dark:bg-[#23271e] file:text-[14px] file:py-2 file:px-4 file:rounded-md file:text-slate-700 dark:file:text-slate-300 file:border-r file:focus:ring-0 ${errors.file ? 'border-red-500' : ''}`}
-              onChange={(e) => setFile(e.target.files?.[0])}
+              onChange={(e:any) => setFile(e.target.files[0])}
             />
             {errors.file && <p className="text-red-500">{errors.file}</p>}
 
@@ -125,21 +126,21 @@ const Product = () => {
               className="border dark:bg-[#23271e] text-[14px] p-2 rounded-md w-full placeholder:text-slate-300 dark:placeholder:text-slate-300"
               placeholder="Enter Price:"
               value={price}
-              onChange={(e) => setPrice((e.target.value))}
+              onChange={(e:any) => setPrice((e.target.value))}
             />
              <input
               type="number"
               className="border dark:bg-[#23271e] text-[14px] p-2 rounded-md w-full placeholder:text-slate-300 dark:placeholder:text-slate-300"
               placeholder="Actual Price:"
               value={actualPrice}
-              onChange={(e) => setactualPrice((e.target.value))}
+              onChange={(e:any) => setactualPrice((e.target.value))}
             />
             <input
               type="number"
               className="border dark:bg-[#23271e] text-[14px] p-2 rounded-md w-full placeholder:text-slate-300 dark:placeholder:text-slate-300"
               placeholder="Number of Stocks"
               value={stock}
-              onChange={(e) => setStock((e.target.value))}
+              onChange={(e:any) => setStock((e.target.value))}
             />
             <select
               required
@@ -225,7 +226,7 @@ const Product = () => {
             <p className='md:w-1/4'>quantity</p>
           </div>
         </div>
-        {data?.message?.subcategories.length > 0 && data?.message?.product.map((product: Product) =>
+        {data?.message?.subcategories.length > 0 && data?.message?.product.map((product:Product) =>
           <div key={product._id} className="flex relative items-center w-full lg:text-sm text-[12px] py-2 justify-between px-2 md:px-[5%]">
             <div className="absolute right-5 top-5 flex justify-center  items-center">
         <button onClick={()=>deleteCategory(product._id)} className="relative p-2 bg-red-50 hover:bg-red-100 text-red-400 hover:text-red-600 rounded-full shadow-md transition-all duration-300 ease-in-out group">
@@ -236,13 +237,13 @@ const Product = () => {
               <div className="flex items-center gap-1 md:gap-5">
                 <img className='hidden md:block object-cover h-10 w-10 border p-1' alt="image" src={product.image} />
                 <div>
-                  <p className="text-[12px] md:text-sm ">{product.name}</p>
-                  <p className="text-[12px] hidden md:block text-slate-400">{product.description}</p>
+                  <p className="text-[12px] md:text-sm ">{product.name.split(" ").slice(0,5).join("")}</p>
+                  <p className="text-[12px] hidden md:block text-slate-400">{product.description.split(" ").slice(0,5).join("")}  ....</p>
                 </div>
               </div>
             </div>
-            <div className="flex justify-center text-center md:w-[40%] text-slate-400 lg:text-sm text-[12px] uppercase gap-5">
-              <p className="md:w-1/4">321</p>
+            <div className="flex justify-center text-center md:w-[40%] text-slate-400 lg:text-sm text-[12px]  gap-5">
+              <p className="md:w-1/4 text-[12px]">{product.subcategory?.name}</p>
               <p className="md:w-1/4">1234</p>
               <p className="md:w-1/4">321</p>
               <p className="md:w-1/4">1234</p>

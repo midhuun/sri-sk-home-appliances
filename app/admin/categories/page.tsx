@@ -7,10 +7,8 @@ import { Category } from "@/app/types/ProductType";
 import Error from "@/app/components/Error";
 import Loading from "@/app/components/Loading";
 import { RiDeleteBin7Fill } from "react-icons/ri";
-import { useRouter } from "next/navigation";
 const Categories = () => {
   const [iscategoryAdd, setiscategoryAdd] = useState(false);
-  const router = useRouter();
   const fetcher = (url:any) => fetch(url).then((res)=>res.json());
   const { data, error, isLoading } = useSWR(
     "/api/admin",
@@ -25,15 +23,18 @@ const Categories = () => {
       body:JSON.stringify({"category":id})
     })
     const result = await res.json();
-    router.refresh();
+    window.location.reload();
     console.log(result);
+    
     
   } 
   // Handle form submission
   const  handleSubmit = async(e:any) => {
+    console.log("Clicked");
+    
     e.preventDefault(); 
     const formData = new FormData();
-    formData.append("name", name);
+    formData.append("categoryName", name);
     formData.append("file", file);
     formData.append("description", description);
     const body = await fetch('/api/admin',{
@@ -41,6 +42,9 @@ const Categories = () => {
       body:formData
     })
     const results:{message:[]} = await body.json();
+    window.location.reload();
+    console.log(results);
+    
   };
   if (error) return <Error />
   if (!data) return <Loading/>
@@ -137,14 +141,14 @@ const Categories = () => {
           <div className="flex items-center gap-5">
           <img className='hidden md:block object-cover h-10 w-10 border p-1' alt="image"  src={category.image} />
           <div>
-          <p className="text-sm ">{category.name}</p>
-          <p className="text-[12px] text-slate-400">{category.description}</p>
+          <p className="text-sm ">{category?.name?.split(" ").slice(0,5).join("")}</p>
+          <p className="text-[12px] text-slate-400">{category?.description?.split(" ").slice(0,5).join("")}</p>
           </div>
           </div>
         </div>
         <div className="flex justify-center w-[20%] text-center text-slate-400 lg:text-sm text-[12px] uppercase gap-5">
-          <p className="w-1/2">321</p>
-          <p className="w-1/2">1234</p>
+          <p className="w-1/2">{category?.total || 0}</p>
+          <p className="w-1/2">{category?.earnings || 0}</p>
         </div>
       </div>)}
         

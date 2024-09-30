@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Josefin_Sans } from "next/font/google";
 import "./globals.css";
 import Theme from "./context/ThemeContext";
-const inter = Inter({ subsets: ["latin"] });
+import Header from "./components/Header";
+import { SessionWrapper } from "./components/SessionWrapper";
+const inter = Josefin_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Sri SK Home Appliances",
@@ -13,14 +15,19 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>) 
+{  
+  
   return (
     <html lang="en" suppressHydrationWarning>
      
       <body className={`${inter.className} bg-[#FFFFFF] dark:text-[#E0E0E0] dark:bg-[#181C14] text-[#333333]`}      >
+      <SessionWrapper>
       <Theme>
+        <Header />
         {children}
         </Theme>
+        </SessionWrapper>
         </body>
    
     </html>

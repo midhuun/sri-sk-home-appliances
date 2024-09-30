@@ -7,6 +7,7 @@ import { Category, SubCategory } from '@/app/types/ProductType';
 import Loading from "@/app/components/Loading";
 import Error from "@/app/components/Error";
 import { RiDeleteBin7Fill } from "react-icons/ri";
+import Image from "next/image";
 
 const SubCategories = () => {
   const [iscategoryAdd, setiscategoryAdd] = useState(false);
@@ -23,6 +24,7 @@ const SubCategories = () => {
       body:JSON.stringify({"subcategory":id})
     })
     const result = await res.json();
+    window.location.reload();
     console.log(result);
     
   } 
@@ -46,6 +48,8 @@ const SubCategories = () => {
   };
   if (error) return <Error />
   if (!data) return <Loading/>
+  console.log("Red");
+  
   return (
     <div className="relative overflow-x-hidden">
       <div
@@ -101,7 +105,7 @@ const SubCategories = () => {
       </div>
 
       <div className="shadow-md bg-[#fcfbfb] dark:text-white dark:bg-[#1a1e16] min-h-screen rounded-md">
-        <div className="flex px-1 lg: px-[5%] py-2 lg:py-7 justify-between gap-3 lg:gap-7">
+        <div className="flex px-1 lg:px-[5%] py-2 lg:py-7 justify-between gap-3 lg:gap-7">
           <input
             placeholder="Search"
             className="dark:bg-[#23271e] w-[30%] px-4 font-light placeholder:text-slate-300  dark:placeholder:text-slate-500 border lg:h-[35px] dark:border-[#272b23]"
@@ -120,7 +124,7 @@ const SubCategories = () => {
           </div>
         </div>
         <div className="flex  lg:text-sm text-[12px] py-2 dark:bg-[#282d22] bg-[#f5f6fb] justify-between px-[5%]">
-          <p className="w-[80%] uppercase">Categories</p>
+          <p className="w-[80%] uppercase">SubCategories</p>
           <div className="flex justify-center text-center w-[20%] lg:text-sm text-[12px] uppercase gap-5">
             <p className=' w-1/2'>Total</p>
             <p className=' w-1/2'>Earnings</p>
@@ -135,16 +139,16 @@ const SubCategories = () => {
         </div>
         <div className="w-[80%]">
           <div className="flex items-center gap-5">
-          <img className='object-cover h-10 w-10 border p-1' alt="image"  src={subcategory.image} />
+          <Image height={1000} width={1000} className='object-cover h-10 w-10 border p-1' alt="image"  src={subcategory.image} />
           <div>
-          <p className="text-sm ">{subcategory.name}</p>
-          <p className="text-[12px] text-slate-400">{subcategory.description}</p>
+          <p className="text-sm ">{subcategory.name.split(" ").slice(0,5).join("")}</p>
+          <p className="text-[12px] text-slate-400">{subcategory.description.split(" ").slice(0,5).join("")}</p>
           </div>
           </div>
         </div>
         <div className="flex justify-center text-center w-[20%] text-slate-400 lg:text-sm text-[12px] uppercase gap-5">
-          <p className="w-1/2">321</p>
-          <p className="w-1/2">1234</p>
+          <p className="w-1/2">{subcategory?.total || 0}</p>
+          <p className="w-1/2">{subcategory?.earnings || 0}</p>
         </div>
       </div>)}
       </div>

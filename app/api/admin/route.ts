@@ -5,7 +5,6 @@ import { NextResponse } from 'next/server';
     const categories= await Category.find();
     const subcategories = await SubCategory.find();
     const product = await Product.find();
-    console.log(process.env.DB_PASS);
     
     return NextResponse.json({ message:{categories,subcategories,product}},{status:200});
 
@@ -16,6 +15,8 @@ import { NextResponse } from 'next/server';
     const image:any = formDatas.get('file');
     const categoryId = formDatas.get('category');
     const subcategoryId = formDatas.get('subcategory');
+    const subcategory = formDatas.get('subcategoryProduct');
+    const categoryName = formDatas.get('categoryName');
     const price = formDatas.get('price');
     const colors = formDatas.get('colors');
     const actualPrice = formDatas.get('actualPrice');
@@ -28,9 +29,10 @@ import { NextResponse } from 'next/server';
         body:form
     })
     const result =await data.json();
-
     const imgUrl = result?.data?.display_url;
-    if(subcategoryId){
+    console.log(imgUrl);
+    
+    if(subcategory){
        const createdProduct = await Product.create({
         name:formDatas.get('name'),
         image:imgUrl,
@@ -43,10 +45,10 @@ import { NextResponse } from 'next/server';
        }) 
       await SubCategory.findByIdAndUpdate(subcategoryId,
         {
-            $push:{products:createdProduct._id}
+            $push:{products:createdProduct}
         },{ new: true, useFindAndModify: false })
     }
-    if(categoryId){
+   else if(categoryId){
       const createdSubCategory =   await SubCategory.create({
             name:formDatas.get('name'),
             image:imgUrl,
@@ -54,12 +56,12 @@ import { NextResponse } from 'next/server';
             category:categoryId
         });
        await Category.findByIdAndUpdate(categoryId, {
-        $push:{subcategories:createdSubCategory?._id},
+        $push:{subcategories:createdSubCategory},
       },{ new: true, useFindAndModify: false });      
     }
-    else{
+    else if(categoryName){
         await Category.create({
-            name:formDatas.get('name'),
+            name:categoryName,
             image:imgUrl,
             description:formDatas.get('description'),
         });
@@ -80,7 +82,6 @@ catch(err){
 export async function DELETE(req: Request) {
     try {
       const { subcategory, category, product } = await req.json();
-      console.log({ subcategory, category, product });
       if (product) {
         const deletedProduct = await Product.findByIdAndDelete(product);
         if (!deletedProduct) {

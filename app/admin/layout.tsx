@@ -6,6 +6,7 @@ import Links from "./links";
 import { useState } from "react";
 const Layout = ({children}:{children:React.ReactNode}) => {
   const [isnavOpen,setIsNavOpen]  =useState(false)
+  
   return (
     <>
         <div className="flex fixed border-b z-[1000] dark:bg-[#181C14] bg-white  dark:border-gray-800 w-full h-[80px] items-center  justify-between px-4">
