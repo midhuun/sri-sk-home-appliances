@@ -1,9 +1,11 @@
+
 import type { Metadata } from "next";
 import { Josefin_Sans } from "next/font/google";
 import "./globals.css";
 import Theme from "./context/ThemeContext";
 import Header from "./components/Header";
 import { SessionWrapper } from "./components/SessionWrapper";
+import ReduxProvider from "./store/provider";
 const inter = Josefin_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -24,8 +26,10 @@ export default function RootLayout({
       <body className={`${inter.className} bg-[#FFFFFF] dark:text-[#E0E0E0] dark:bg-[#181C14] text-[#333333]`}      >
       <SessionWrapper>
       <Theme>
+        <ReduxProvider>
         <Header />
         {children}
+        </ReduxProvider>
         </Theme>
         </SessionWrapper>
         </body>

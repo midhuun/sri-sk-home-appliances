@@ -3,12 +3,14 @@ import Card from '@/app/components/Card';
 import Error from '@/app/components/Error';
 import { PiHeartbeatLight } from "react-icons/pi";
 import Loading from '@/app/components/Loading';
-import { Product } from '@/app/types/ProductType';
+import {ProductType} from '@/app/types/ProductType';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import React from 'react'
 import useSWR from 'swr';
+import { addToCart } from '@/app/store/CartSlice';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/app/store/store';
 const page = () => {
 const {product}:any = useParams();
 const subName:any = decodeURIComponent(product);
@@ -17,9 +19,12 @@ const { data, error, isLoading } = useSWR(
   `/api/user/product/${subName}`,
   fetcher
 );
-const productdetails:any = data?.message
+const productdetails= data?.message as ProductType
 console.log(productdetails);
-
+  const dispatch =  useDispatch<AppDispatch>();
+ function addProducttoCart(productdetails:ProductType){
+  dispatch(addToCart(productdetails))
+ }
   return (
     <>
     {isLoading && <Loading />}
@@ -39,7 +44,7 @@ console.log(productdetails);
         </div>
         <p className='text-[14px] md:text-[16px]'>{productdetails?.description}</p>
         <div className='space-y-1 pt-6 flex flex-col items-center'>
-        <button className='py-3 my-2 w-[80%] md:w-full font-semibold rounded-2xl bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 hover:text-white dark:hover:text-black'>Add to Bag</button>
+        <button onClick={()=>addProducttoCart(productdetails)} className='py-3 my-2 w-[80%] md:w-full font-semibold rounded-2xl bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 hover:text-white dark:hover:text-black'>Add to Bag</button>
         <button className='py-3 hover:border-black dark:border-gray-800 my-2 flex justify-center items-center gap-2 text-center border  dark:hover:border-white w-[80%] md:w-full font-semibold rounded-2xl '>Favourite<PiHeartbeatLight size={24} /></button>
         </div>
         </div>

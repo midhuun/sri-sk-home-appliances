@@ -5,9 +5,9 @@ export interface Category {
     description?: string;
     total?: number;
     earnings?: number;
-    subcategories?: SubCategory[]; // Array of subcategory IDs as strings
+    subcategories?: SubCategoryType[]; // Array of subcategory IDs as strings
   }
-export interface SubCategory {
+export interface SubCategoryType {
     _id?: string;
     name: string;
     image: string;
@@ -15,9 +15,9 @@ export interface SubCategory {
     earnings?: number;
     description: string;
     category: string; // Category ID as a string
-    products?: Product[]; // Array of product IDs as strings
+    products?: ProductType[]; // Array of product IDs as strings
   }
-export interface Product {
+export interface ProductType {
     _id?: string;
     name: string;
     image: string;
@@ -28,6 +28,6 @@ export interface Product {
     originalPrice?: number; // Optional if it's not always present
     colors?: string[];
     stock: number;
-    subcategory: SubCategory; // Subcategory ID as a string
+    subcategory: SubCategoryType; // Subcategory ID as a string
   }
   
