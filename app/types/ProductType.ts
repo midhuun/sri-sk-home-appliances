@@ -29,5 +29,6 @@ export interface ProductType {
     colors?: string[];
     stock: number;
     subcategory: SubCategoryType; // Subcategory ID as a string
+    quantity?:number
   }
   

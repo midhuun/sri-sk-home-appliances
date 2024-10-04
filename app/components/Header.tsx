@@ -1,4 +1,5 @@
 "use client";
+import { useSelector } from "react-redux";
 import { CgMenuLeftAlt } from "react-icons/cg";
 import ThemeSwitch from "../context/ThemeSwitch";
 import { LuUser } from "react-icons/lu";
@@ -6,16 +7,19 @@ import { GoHeart } from "react-icons/go";
 import { LuShoppingBag } from "react-icons/lu";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
-import { Category, SubCategory } from "../types/ProductType";
+import { Category, ProductType } from "../types/ProductType";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
+import { useAppSelector } from "../store/store";
 export default  function Header() {
+   const state = useAppSelector((state:any)=>state.cart);
   const {data:session} =useSession();
   const [isOpen, setIsOpen] = useState(false);
   const toggleDrawer = () => {
     setIsOpen(!isOpen);
   };
+  const [iscartOpen,setiscartOpen] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserClicked,setisUserClicked] = useState(false);
   const [isRegister,setIsregister] = useState(false);
@@ -80,6 +84,74 @@ export default  function Header() {
   };
   return (
     <div>
+      {/* Cart Page */}
+      <div
+  className={`fixed top-0 right-0 h-screen w-[300px] md:w-[500px] z-[100] dark:bg-[#1d1e1d] bg-white transition-transform duration-300 ${
+    iscartOpen ? "translate-x-0" : "translate-x-full"
+  }`}
+>
+  <button
+    onClick={() => setiscartOpen(false)}
+    className="absolute top-5 right-5 text-2xl"
+  >
+    ✕
+  </button>
+
+  <div className="p-5">
+
+    {/* Cart Section */}
+    <h3 className="text-xl font-semibold mb-5">BAG</h3>
+     <hr />
+    <div className="space-y-4 mt-5">
+      {state?.map((item: ProductType) => (
+        <div key={item._id} className="flex  justify-between p-3 border rounded-lg">
+          {/* Image */}
+          <img
+            src={item.image}
+            alt={item.name}
+            className="w-16 h-16 md:h-[100px] md:w-[100px] object-cover rounded-lg"
+          />
+          {/* Name and Quantity Controls */}
+          <div className="flex-1  ml-4">
+            <h4 className="text-md ">{item.name}</h4>
+            <span className="text-[12px] my-2">₹ {item.price}</span>
+            <div className="flex border justify-center w-[99px] items-center mt-2">
+              <button
+                className="w-[33px] flex justify-center items-center text-gray-600 rounded-md hover:bg-black transition"
+              >
+                -
+              </button>
+              <span className="text-lg flex justify-center items-center w-[33px]">{item.quantity}</span>
+              <button
+                className=" flex justify-center items-center w-[33px] text-gray-600 rounded-md hover:bg-gray-300 transition"
+              >
+                +
+              </button>
+            </div>
+          </div>
+
+          {/* Delete Button */}
+          
+        </div>
+      ))}
+    </div>
+
+    {/* Total Section */}
+    <div className="mt-5 flex justify-between items-center">
+      <h4 className="text-lg font-semibold">Total:</h4>
+      <span className="text-lg font-bold">₹{300}</span>
+    </div>
+
+    {/* Checkout Button */}
+    <button
+      
+      className="mt-5 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+    >
+      Checkout
+    </button>
+  </div>
+</div>
+
       {/* Register Page */}
       <div className={`w-[400px] h-auto bg-white dark:bg-[#181C14] border z-[100] ${isRegister?"absolute":"hidden"} top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  rounded-lg shadow-lg`}>
   <div className="p-8 relative">
@@ -141,7 +213,7 @@ export default  function Header() {
 {/* Login Page Starts from Here */}
 {session?<>
       {/* Button to open the drawer */}
-      <div className="p-5">
+      <div className="md:p-5">
         <button onClick={toggleDrawer} className="text-blue-600 hover:text-blue-700 transition-all duration-400">
           <h2 className="text-2xl font-bold mb-7">Open User Menu</h2>
         </button>
@@ -222,7 +294,7 @@ export default  function Header() {
 }
 
       {/* Main Header */}
-      <div className="flex h-[100px] p-5 justify-between items-center">
+      <div className="flex h-[60px] md:h-[100px] md:p-5 p-2 justify-between items-center">
         <CgMenuLeftAlt
           onClick={() => setIsMenuOpen(true)}
           className="cursor-pointer"
@@ -240,10 +312,10 @@ export default  function Header() {
               5
             </span>
           </div>
-          <div className="relative">
+          <div onClick={()=>setiscartOpen(!iscartOpen)} className="relative cursor-pointer">
             <LuShoppingBag size={24} />
             <span className="absolute -top-2 -right-2 h-5 w-5 bg-red-500 text-white text-xs flex justify-center items-center rounded-full">
-              3
+              {state.length}
             </span>
           </div>
         </div>

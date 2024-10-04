@@ -20,7 +20,6 @@ const { data, error, isLoading } = useSWR(
   fetcher
 );
 const productdetails= data?.message as ProductType
-console.log(productdetails);
   const dispatch =  useDispatch<AppDispatch>();
  function addProducttoCart(productdetails:ProductType){
   dispatch(addToCart(productdetails))
