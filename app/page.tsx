@@ -22,7 +22,7 @@ export default  async function Home() {
           <h1 className="text-[16px] md:text-[20px] py-5 font-bold uppercase">{sub.name}</h1> 
           <div className="flex flex-wrap gap-3">
           {sub.products?.map((product:any)=>
-          <Link key={product._id}   href={`/subcategory/${sub.name}/product/${product.name}`}> <Card price={product.price}  name={product.name} image={product.image[0]} description={product.description} key={product._id}   /></Link>
+          <Link key={product._id}   href={`/subcategory/${sub.name}/product/${product.name}`}> <Card price={product.price}  name={product.name} image={product.image[0]} description={product.description}  /></Link>
         )}
         </div>
           </div>
