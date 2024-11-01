@@ -15,7 +15,7 @@ const SubCategories = () => {
   const fetcher = (url: any) => fetch(url).then((res) => res.json());
   const { data, error} = useSWR("/api/admin", fetcher);
   const [name, setName] = useState("");
-  const [file, setFile] = useState<File | null>(null); // Handle file state
+  const [file, setFile] = useState<File | any>(null); // Handle file state
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState("");
   async function deleteCategory(id:any){
@@ -31,10 +31,28 @@ const SubCategories = () => {
   const handleSubmit = async (e: any) => {
     setisLoading(true);
     e.preventDefault();
+    const uploadedUrls:any = [];
+    const imageData = new FormData();
+      imageData.append('image', file);
+  
+      try {
+        const response = await fetch(`https://api.imgbb.com/1/upload?key=f3145a10e034400f4b912f8123f851b1`, {
+          method: 'POST',
+          body: imageData
+        });
+        const result = await response.json();
+        
+        // If upload was successful, add the URL to the list
+        if (result.success) {
+          uploadedUrls.push(result.data.display_url);
+        }
+      } catch (error) {
+        console.error('Failed to upload image:', error);
+      }
     const formData = new FormData();
     formData.append("name", name);
-    if (file) {
-      formData.append("file", file); // Append the file
+    if (uploadedUrls.length>0) {
+      formData.append("images", uploadedUrls); // Append the file
     }
     formData.append("description", description);
     formData.append("category", categoryId); // Append category ID

@@ -7,8 +7,11 @@ import { Category, Product, SubCategory } from '@/app/types/ProductType';
 import Loading from "@/app/components/Loading";
 import Error from "@/app/components/Error";
 import { RiDeleteBin7Fill } from "react-icons/ri";
+import Image from "next/image";
 const Product = () => {
   const [iscategoryAdd, setiscategoryAdd] = useState(false);
+  const [images, setImages] = useState([]);
+  const [urls, setUrls] = useState([]);
   const [isLoading, setisLoading] = useState(false);
   const [name, setName] = useState("");
   const [stock,setStock] = useState<number|undefined>(undefined);
@@ -36,11 +39,38 @@ const Product = () => {
     console.log(result);
   } 
   const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    setisLoading(true);
+    e.preventDefault(); // Prevent form submission
+  
+    const uploadedUrls:any = [];
+    setisLoading(true); // Start loading state
+  
+    // Loop through each image and upload it to get URLs
+    for (const image of images) {
+      const formData = new FormData();
+      formData.append('image', image);
+  
+      try {
+        const response = await fetch(`https://api.imgbb.com/1/upload?key=f3145a10e034400f4b912f8123f851b1`, {
+          method: 'POST',
+          body: formData
+        });
+        const result = await response.json();
+        
+        // If upload was successful, add the URL to the list
+        if (result.success) {
+          uploadedUrls.push(result.data.display_url);
+        }
+      } catch (error) {
+        console.error('Failed to upload image:', error);
+      }
+    }
+    
+    setUrls(uploadedUrls); // Update the state with uploaded URLs
+    console.log("Uploaded Image URLs:", uploadedUrls); // Log URLs after upload
+  
     const newErrors: { [key: string]: string } = {};
     if (!name) newErrors.name = "Name is required";
-    if (!file) newErrors.file = "File is required";
+
     if (!description) newErrors.description = "Description is required";
     if (!subcategoryId) newErrors.categoryId = "SubCategory is required";
     if (colors.some(color => !color)) newErrors.colors = "All colors must be filled";
@@ -51,13 +81,15 @@ const Product = () => {
     
     const formData:any = new FormData();
     formData.append("name", name);
-    if (file) formData.append("file",file); // Append the file
+    formData.append("images",uploadedUrls); // Append the file
     formData.append("description", description);
     formData.append("colors", colors); // Append colors
     formData.append("price",price)
     formData.append("subcategoryProduct",subcategoryId)
     formData.append("actualPrice",actualPrice)
-    formData.append("stock",stock)
+    formData.append("stock",stock);
+    console.log(file);
+    
     const response = await fetch('/api/admin', {
       method: 'POST',
       body: formData,
@@ -107,10 +139,10 @@ const Product = () => {
             {errors.name && <p className="text-red-500">{errors.name}</p>}
             <input
               type="file"
-               accept=".jpg"
+              accept=".png, .jpg, .jpeg"
                multiple
               className={`border text-[14px] p-0 rounded-md w-full file:bg-white file:dark:bg-[#23271e] file:text-[14px] file:py-2 file:px-4 file:rounded-md file:text-slate-700 dark:file:text-slate-300 file:border-r file:focus:ring-0 ${errors.file ? 'border-red-500' : ''}`}
-              onChange={(e:any) => setFile(e.target.files[0])}
+              onChange={(e:any)=>setImages(Array.from(e.target.files))}
             />
             {errors.file && <p className="text-red-500">{errors.file}</p>}
 
@@ -235,7 +267,7 @@ const Product = () => {
         </div>
             <div className="md:w-[60%]">
               <div className="flex items-center gap-1 md:gap-5">
-                <img className='hidden md:block object-cover h-10 w-10 border p-1' alt="image" src={product.image} />
+                <Image width={40} height={40} className='hidden md:block object-cover h-10 w-10 border p-1' alt="image" src={product.image[0]} />
                 <div>
                   <p className="text-[12px] md:text-sm ">{product.name.split(" ").slice(0,5).join("")}</p>
                   <p className="text-[12px] hidden md:block text-slate-400">{product.description.split(" ").slice(0,5).join("")}  ....</p>

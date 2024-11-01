@@ -1,5 +1,6 @@
 "use client";
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { TbDoorExit } from "react-icons/tb";
 import { CgMenuLeftAlt } from "react-icons/cg";
 import ThemeSwitch from "../context/ThemeSwitch";
 import { LuUser } from "react-icons/lu";
@@ -10,19 +11,42 @@ import useSWR from "swr";
 import { Category, ProductType } from "../types/ProductType";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { signIn, useSession } from "next-auth/react";
-import { useAppSelector } from "../store/store";
+import { signIn, useSession,signOut } from "next-auth/react";
+import { AppDispatch, useAppSelector } from "../store/store";
+import { addToCart, removeFromCart, selectTotalValue } from "../store/CartSlice";
+import {removeFromFavourite} from '../store/FavouriteSlice';
+import { IoBagAddOutline, IoBagCheckOutline } from "react-icons/io5";
+
+import Image from "next/image";
+import { PiHeartStraightBreak } from "react-icons/pi";
+import { deleteCookie, getCookie, setCookie } from "cookies-next";
 export default  function Header() {
-   const state = useAppSelector((state:any)=>state.cart);
-  const {data:session} =useSession();
-  const [isOpen, setIsOpen] = useState(false);
-  const toggleDrawer = () => {
-    setIsOpen(!isOpen);
-  };
+  const [userData,setuserData] = useState<any>({});  
+useEffect(()=>{
+  const token = getCookie("usertoken")
+  const storedData = getCookie("data")
+
+  console.log(data);
+  
+  if (storedData) {
+      const user = JSON.parse(storedData);
+      setuserData({"email":user.email,"name": user.name})
+  } else {
+      console.log("No user data found");
+  }
+},[])
+    const total = useAppSelector(selectTotalValue);
+   const cartItems = useAppSelector((state:any)=>state.cart);
+   const favourite = useAppSelector((state:any)=>state.favourite);   
+  const {data:session} =useSession(); 
+  const [loginmsg,setloginmsg] = useState("Login");
+  // Handling userClicks
   const [iscartOpen,setiscartOpen] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserClicked,setisUserClicked] = useState(false);
   const [isRegister,setIsregister] = useState(false);
+  const [isFavouriteOpen,setisfavouriteOpen] = useState(false)  
+  // Handling Login Data
   const fetcher = (url: any) => fetch(url).then((res) => res.json());
   const [loginData, setLoginData] = useState({
     username: '',
@@ -35,6 +59,13 @@ export default  function Header() {
     password: '',
     confirmPassword: '',
   });
+  const dispatch =  useDispatch<AppDispatch>();
+ function addProducttoCart(productdetails:ProductType){
+  dispatch(addToCart(productdetails))
+ }
+ function deleteProductFromCart(productdetails:ProductType){
+  dispatch(removeFromCart(productdetails))
+ }
   const { data, error} = useSWR("/api/admin", fetcher);
   const pathname = usePathname();
   if(pathname.includes('/admin')){
@@ -64,14 +95,56 @@ export default  function Header() {
       [name]: value,
     });
   };
-  const handleLoginSubmit = (e:any) => {
+  const handleLoginSubmit = async(e:any) => {
+    setloginmsg("Logging in")
     e.preventDefault();
-    console.log('Login Data:', loginData);
+    try{
+    const res = await fetch('http://localhost:3000/api/user/login',
+      {
+        method:'POST',
+        body:JSON.stringify(loginData)
+      }
+    )
+    const result = await res.json();
+    if(result){
+      setTimeout(() => {
+        setloginmsg("Login Successful");
+        setloginmsg("Login");  
+    }, 2000);
     
+    }
+      const user = result.message;
+      setCookie('usertoken',result.message.token,{ maxAge: 60 * 60 * 24});
+      setCookie("data",JSON.stringify(user),{ maxAge: 60 * 60 * 24})
+      setuserData({"email":user.email,"name": user.name})
+    console.log(result.message);
+    setLoginData({
+      username: '',
+      password: '',
+    })
+  }
+  catch(err){
+    console.log(err); 
+  }
   };
-
+   function logout(){
+    if(session){
+    signOut('google');
+    setisUserClicked(false)
+    }
+    if(userData){
+     deleteCookie('usertoken');
+     deleteCookie("data");
+      setuserData({});
+      setisUserClicked(false)
+    }
+   }
   const handleRegisterSubmit = async(e:any) => {
     e.preventDefault();
+      if(registerData.password !== registerData.confirmPassword){
+        alert("Passwords do not match");
+        return;
+    }
     const res = await fetch('http://localhost:3000/api/user/register',
       {
         method:'POST',
@@ -79,8 +152,14 @@ export default  function Header() {
       }
     )
     const result = await res.json();
-    console.log(result);
-    
+    if(result.status === 200){
+
+      setisUserClicked(true);
+      setuserData(result.message.user)
+    }
+    console.log(result.message);
+    localStorage.setItem('token',result?.message);
+
   };
   return (
     <div>
@@ -103,7 +182,7 @@ export default  function Header() {
     <h3 className="text-xl font-semibold mb-5">BAG</h3>
      <hr />
     <div className="space-y-4 mt-5">
-      {state?.map((item: ProductType) => (
+      {cartItems?.map((item: ProductType) => (
         <div key={item._id} className="flex  justify-between p-3 border rounded-lg">
           {/* Image */}
           <img
@@ -113,16 +192,16 @@ export default  function Header() {
           />
           {/* Name and Quantity Controls */}
           <div className="flex-1  ml-4">
-            <h4 className="text-md ">{item.name}</h4>
+            <h4 className="text-md ">{item.name.length>20 ?item.name.slice(0,20)+'...':item.name}</h4>
             <span className="text-[12px] my-2">₹ {item.price}</span>
             <div className="flex border justify-center w-[99px] items-center mt-2">
               <button
-                className="w-[33px] flex justify-center items-center text-gray-600 rounded-md hover:bg-black transition"
+               onClick={()=>deleteProductFromCart(item)} className="w-[33px] flex justify-center items-center text-gray-600 rounded-md hover:bg-gray-300 transition"
               >
                 -
               </button>
               <span className="text-lg flex justify-center items-center w-[33px]">{item.quantity}</span>
-              <button
+              <button onClick={()=>addProducttoCart(item)}
                 className=" flex justify-center items-center w-[33px] text-gray-600 rounded-md hover:bg-gray-300 transition"
               >
                 +
@@ -131,29 +210,121 @@ export default  function Header() {
           </div>
 
           {/* Delete Button */}
-          
+          <span>₹ {item.quantity*item.price}</span>
         </div>
       ))}
     </div>
 
     {/* Total Section */}
-    <div className="mt-5 flex justify-between items-center">
+    {total>0?<><div className="mt-5 flex justify-between items-center">
       <h4 className="text-lg font-semibold">Total:</h4>
-      <span className="text-lg font-bold">₹{300}</span>
+      <span className="text-lg font-bold">₹{total}</span>
     </div>
-
-    {/* Checkout Button */}
+    <Link href='/checkout'>
     <button
-      
+      onClick={()=>setiscartOpen(false)}
       className="mt-5 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
     >
       Checkout
     </button>
+    </Link>
+    </>:<>
+    <div className="mt-5 flex justify-between items-center p-2 rounded-lg ">
+    <h4 className="text-sm font-semibold text-gray-500">Your cart is empty</h4>
+  </div>
+  
+   </>
+    }
+
+   
+  </div>
+</div>
+      {/* Favourite Page */}
+      <div
+  className={`fixed top-0 right-0 h-screen w-[300px] md:w-[500px] z-[100] dark:bg-[#1d1e1d] bg-white transition-transform duration-300 ${
+    isFavouriteOpen ? "translate-x-0" : "translate-x-full"
+  }`}
+>
+  <button
+    onClick={() => setisfavouriteOpen(false)}
+    className="absolute top-5 right-5 text-2xl"
+  >
+    ✕
+  </button>
+
+  <div className="p-5">
+    <h3 className="text-xl font-semibold mb-5">Favourites</h3>
+     <hr />
+    <div className="space-y-4 mt-5">
+      {favourite?.map((item: ProductType) => (
+        <div key={item._id} className="flex  justify-between p-3 border rounded-lg">
+          {/* Image */}
+          <img
+            src={item.image}
+            alt={item.name}
+            className="w-16 h-16 md:h-[100px] md:w-[100px] object-cover rounded-lg"
+          />
+          {/* Name and Quantity Controls */}
+          <div className="flex-1 justify-center  items-center ml-4">
+            <h4 className="text-md ">{item.name.length>20 ?item.name.slice(0,40)+'...':item.name}</h4>
+            <span className="text-[12px] my-2">₹ {item.price}</span>
+            <button
+              onClick={() => dispatch(removeFromFavourite(item))}
+              className="text-red-500 mx-3"
+              aria-label="Remove from favourites"
+            >
+              <PiHeartStraightBreak size={18} />
+            </button>
+          </div>
+
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
+      {/* Register Page */}
+{session || userData.name ? <div
+  className={`fixed top-0 right-0 h-screen w-[300px] md:w-[300px] z-[100] dark:bg-[#1d1e1d] bg-white transition-transform duration-300 ${
+    isUserClicked ? "translate-x-0" : "translate-x-full"
+  }`}
+>
+<button onClick={()=>setisUserClicked(false)} className="absolute top-1 hover:text-red-500 dark:hover:text-red-400 right-3 text-2xl">✕</button>
+<div className=" p-2">
+  <div className="flex pt-5 pb-3 gap-3">
+    {session?.user?.image && session?.user?.name &&
+      <Image alt={session?.user.name} className="h-10 w-10 rounded-full border" width={200} height={100} src={session?.user?.image} />
+    }
+    {userData &&
+      <Image alt={userData.name} className="h-10 w-10 rounded-full border" width={200} height={100} src='/profile.png' />
+    }
+  <div className="">
+  <p className="text-[16px]">{session?.user?.name}  {userData?.name}</p>
+  <p className="text-[12px]">{session?.user?.email}  {userData?.email}</p>
+  </div>
+  </div>
+  <hr />
+  <div className="">
+    <p className="flex  py-4 dark:hover:bg-white dark:hover:text-black hover:bg-black hover:text-white cursor-pointer gap-3 items-center"><LuUser className="ml-4" size={24} />My Profile</p>
+    <hr />
+    <p  className="flex py-4 dark:hover:bg-white dark:hover:text-black hover:bg-black hover:text-white cursor-pointer gap-3 items-center"><IoBagCheckOutline className="ml-4" size={24} />My Orders</p>
+  <hr />
+  <p onClick={()=>{setiscartOpen(true); setisUserClicked(false)}} className="flex py-4 dark:hover:bg-white dark:hover:text-black hover:bg-black hover:text-white cursor-pointer gap-3 items-center"><IoBagAddOutline className="ml-4" size={24} />Cart</p>
+  <hr />
+  <p onClick={()=>{setisfavouriteOpen(true); setisUserClicked(false)}} className="flex py-4 dark:hover:bg-white dark:hover:text-black hover:bg-black hover:text-white cursor-pointer gap-3 items-center"><GoHeart className="ml-4" size={24} />Favourites</p>
+  <hr />
+  <p onClick={logout} className="flex py-4 dark:hover:bg-white dark:hover:text-black hover:bg-black hover:text-white cursor-pointer gap-3 items-center"><TbDoorExit className="ml-4" size={24} />Logout</p>
+
   </div>
 </div>
 
-      {/* Register Page */}
-      <div className={`w-[400px] h-auto bg-white dark:bg-[#181C14] border z-[100] ${isRegister?"absolute":"hidden"} top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  rounded-lg shadow-lg`}>
+</div>:<> 
+<div 
+    className={`fixed inset-0 bg-black z-[100] bg-opacity-50 backdrop-blur-sm transition-opacity ${isRegister || isUserClicked ? "block" : "hidden"}`} 
+    onClick={() => { setIsregister(false); setisUserClicked(false); }} 
+  >
+
+  </div>
+  <div className={`w-[400px] h-auto bg-white dark:bg-[#181C14] border z-[100] ${isRegister?"absolute":"hidden"} top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  rounded-lg shadow-lg`}>
   <div className="p-8 relative">
     <button onClick={()=>setIsregister(false)} className="absolute top-1 hover:text-red-500 dark:hover:text-red-400 right-3 text-xl">✕</button>
 
@@ -162,7 +333,7 @@ export default  function Header() {
     <form onSubmit={handleRegisterSubmit}>
       <div className="mb-4">
         <label htmlFor="fullName" className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Full Name</label>
-        <input type="text"  name="fullName"
+        <input type="text" required name="fullName"
         value={registerData.fullName}
         onChange={handleRegisterChange}
          id="fullName" className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Enter your full name" required />
@@ -170,7 +341,7 @@ export default  function Header() {
 
       <div className="mb-4">
         <label htmlFor="email"  className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Email</label>
-        <input type="email" name="email"
+        <input type="email"  name="email"
          value={registerData.email}
          onChange={handleRegisterChange}
          id="email" className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Enter your email" required />
@@ -178,7 +349,7 @@ export default  function Header() {
 
       <div className="mb-4">
         <label htmlFor="phone"  className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Phone Number</label>
-        <input type="tel"  name="phone"
+        <input type="tel" required  name="phone"
         value={registerData.phone}
         onChange={handleRegisterChange}
         id="phone" className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Enter your phone number" required />
@@ -186,7 +357,7 @@ export default  function Header() {
 
       <div className="mb-4">
         <label htmlFor="password" className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Password</label>
-        <input type="password"  name="password"
+        <input type="password" required name="password"
          value={registerData.password}
          onChange={handleRegisterChange}
           className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Enter your password" required />
@@ -194,13 +365,13 @@ export default  function Header() {
 
       <div className="mb-6">
         <label htmlFor="confirmPassword" className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Confirm Password</label>
-        <input type="password" name="confirmPassword"
+        <input type="password" required name="confirmPassword"
         value={registerData.confirmPassword}
         onChange={handleRegisterChange}
          id="confirmPassword" className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Confirm your password" required />
       </div>
 
-      <button type="submit" className="w-full bg-blue-500 dark:bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors">Register</button>
+      <button  type="submit" className="w-full bg-blue-500 dark:bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors">Register</button>
     </form>
 
     <div className="flex items-center justify-between mt-4">
@@ -209,40 +380,6 @@ export default  function Header() {
     </div>
   </div>
 </div>
-
-{/* Login Page Starts from Here */}
-{session?<>
-      {/* Button to open the drawer */}
-      <div className="md:p-5">
-        <button onClick={toggleDrawer} className="text-blue-600 hover:text-blue-700 transition-all duration-400">
-          <h2 className="text-2xl font-bold mb-7">Open User Menu</h2>
-        </button>
-      </div>
-
-      {/* Drawer - slides in from right */}
-      <div
-        className={`fixed top-0 right-0 h-full w-64 bg-white shadow-lg transform ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
-        } transition-transform duration-500 ease-in-out`}
-      >
-        <div className="p-5 flex flex-col space-y-6">
-          {/* User Logo and Name */}
-          <div className="flex items-center space-x-4">
-            <img src="/path-to-user-logo.jpg" alt="User Logo" className="w-10 h-10 rounded-full" />
-            <span className="text-lg font-semibold">Username</span>
-          </div>
-
-          {/* Order Icon */}
-          <Link href="/orders" className="flex items-center space-x-4 hover:text-blue-700">
-            <img src="/path-to-order-logo.jpg" alt="Order Logo" className="w-6 h-6" />
-            <span>Your Orders</span>
-          </Link>
-
-          {/* Logout Button */}
-          <button className="text-red-600 hover:text-red-700">Logout</button>
-        </div>
-      </div>
-    </>:
 <div className={`w-[400px] bg-white dark:bg-[#181C14] h-auto border dark:border-gray-700 z-[100] ${isUserClicked?"absolute":"hidden"} top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-lg`}>
   <div className="relative p-8">
     <button onClick={()=>setisUserClicked(false)} className="absolute top-1 hover:text-red-500 dark:hover:text-red-400 right-3 text-xl">✕</button>
@@ -251,11 +388,11 @@ export default  function Header() {
     
     <form onSubmit={handleLoginSubmit}>
       <div className="mb-4">
-        <label htmlFor="username" className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Username</label>
+        <label htmlFor="username" className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Mobile or Email</label>
         <input  name="username"
         value={loginData.username}
         onChange={handleLoginChange}
-         type="text" id="username" className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Enter your username" />
+         type="text" id="username" className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Enter your mobile or email" />
       </div>
 
       <div className="mb-6">
@@ -266,7 +403,7 @@ export default  function Header() {
          id="password" className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Enter your password" />
       </div>
 
-      <button type="submit" className="w-full bg-blue-500 dark:bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors">Login</button>
+      <button type="submit" className="w-full bg-blue-500 dark:bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors">{loginmsg}</button>
     </form>
 
     <div className="flex items-center justify-between mt-4">
@@ -290,8 +427,8 @@ export default  function Header() {
       Continue with Google
     </button>
   </div>
-</div>
-}
+</div></>}
+     
 
       {/* Main Header */}
       <div className="flex h-[60px] md:h-[100px] md:p-5 p-2 justify-between items-center">
@@ -306,7 +443,7 @@ export default  function Header() {
           <div onClick={()=>setisUserClicked(!isUserClicked)} className="">
             <LuUser size={26} />
           </div>
-          <div className="relative">
+          <div onClick={()=>setisfavouriteOpen(!isFavouriteOpen)}  className="relative">
             <GoHeart size={26} />
             <span className="absolute -top-2 -right-2 h-5 w-5 bg-red-500 text-white text-xs flex justify-center items-center rounded-full">
               5
@@ -315,7 +452,7 @@ export default  function Header() {
           <div onClick={()=>setiscartOpen(!iscartOpen)} className="relative cursor-pointer">
             <LuShoppingBag size={24} />
             <span className="absolute -top-2 -right-2 h-5 w-5 bg-red-500 text-white text-xs flex justify-center items-center rounded-full">
-              {state.length}
+              {cartItems.length}
             </span>
           </div>
         </div>
@@ -351,9 +488,6 @@ export default  function Header() {
           className="fixed inset-0 bg-black opacity-50 z-10"
         />
       )}
-      {
-        session?<h1>{JSON.stringify(session)}</h1>:<h1>Not Welcome</h1>
-      }
     </div>
   );
 }

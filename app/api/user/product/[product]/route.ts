@@ -6,6 +6,8 @@ export async function GET(req: Request) {
     const url =req.url;
     const parts = url.split('/'); 
     const id = parts[parts.indexOf('product') + 1];  // Getting the value after 'sub'
+    console.log(decodeURIComponent(id));
+    
     const subCategory:any = await Product.findOne({name:decodeURIComponent(id)}).populate('subcategory');
     return NextResponse.json(
       { message:subCategory },

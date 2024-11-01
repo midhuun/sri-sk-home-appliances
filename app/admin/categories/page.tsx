@@ -7,6 +7,7 @@ import { Category } from "@/app/types/ProductType";
 import Error from "@/app/components/Error";
 import Loading from "@/app/components/Loading";
 import { RiDeleteBin7Fill } from "react-icons/ri";
+import Image from "next/image";
 const Categories = () => {
   const [iscategoryAdd, setiscategoryAdd] = useState(false);
   const fetcher = (url:any) => fetch(url).then((res)=>res.json());
@@ -31,11 +32,30 @@ const Categories = () => {
   // Handle form submission
   const  handleSubmit = async(e:any) => {
     console.log("Clicked");
-    
+    const uploadedUrls:any = [];
+    const imageData = new FormData();
+      imageData.append('image', file);
+  
+      try {
+        const response = await fetch(`https://api.imgbb.com/1/upload?key=f3145a10e034400f4b912f8123f851b1`, {
+          method: 'POST',
+          body: imageData
+        });
+        const result = await response.json();
+        
+        // If upload was successful, add the URL to the list
+        if (result.success) {
+          uploadedUrls.push(result.data.display_url);
+        }
+      } catch (error) {
+        console.error('Failed to upload image:', error);
+      }
     e.preventDefault(); 
     const formData = new FormData();
     formData.append("categoryName", name);
-    formData.append("file", file);
+    if(uploadedUrls.length>0){
+    formData.append("images", uploadedUrls);
+    }
     formData.append("description", description);
     const body = await fetch('/api/admin',{
       method:'POST',
@@ -139,7 +159,7 @@ const Categories = () => {
         
         <div className="w-[80%]">
           <div className="flex items-center gap-5">
-          <img className='hidden md:block object-cover h-10 w-10 border p-1' alt="image"  src={category.image} />
+          <Image width={40} height={40} className='hidden md:block object-cover h-10 w-10 border p-1' alt="image"  src={category.image} />
           <div>
           <p className="text-sm ">{category?.name?.split(" ").slice(0,5).join("")}</p>
           <p className="text-[12px] text-slate-400">{category?.description?.split(" ").slice(0,5).join("")}</p>

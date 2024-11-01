@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import CartSlice from "./CartSlice";
 import { TypedUseSelectorHook, useSelector } from "react-redux";
+import FavouriteSlice from "./FavouriteSlice";
 
 export  const store = configureStore({
     reducer:{
-        cart:CartSlice
+        cart:CartSlice,
+        favourite:FavouriteSlice
     }
 })
 
