@@ -338,7 +338,7 @@ useEffect(()=>{
         <input type="text" required name="fullName"
         value={registerData.fullName}
         onChange={handleRegisterChange}
-         id="fullName" className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Enter your full name" required />
+         id="fullName" className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Enter your full name"  />
       </div>
 
       <div className="mb-4">
@@ -354,7 +354,7 @@ useEffect(()=>{
         <input type="tel" required  name="phone"
         value={registerData.phone}
         onChange={handleRegisterChange}
-        id="phone" className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Enter your phone number" required />
+        id="phone" className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Enter your phone number"  />
       </div>
 
       <div className="mb-4">
@@ -362,7 +362,7 @@ useEffect(()=>{
         <input type="password" required name="password"
          value={registerData.password}
          onChange={handleRegisterChange}
-          className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Enter your password" required />
+          className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Enter your password"  />
       </div>
 
       <div className="mb-6">
@@ -370,7 +370,7 @@ useEffect(()=>{
         <input type="password" required name="confirmPassword"
         value={registerData.confirmPassword}
         onChange={handleRegisterChange}
-         id="confirmPassword" className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Confirm your password" required />
+         id="confirmPassword" className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Confirm your password"  />
       </div>
 
       <button  type="submit" className="w-full bg-blue-500 dark:bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors">Register</button>

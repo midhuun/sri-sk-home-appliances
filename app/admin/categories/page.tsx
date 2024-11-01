@@ -1,6 +1,6 @@
 "use client";
 import useSWR from "swr";
-import { lazy, useState } from "react";
+import {  useState } from "react";
 import { IoAddOutline } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
 import { Category } from "@/app/types/ProductType";

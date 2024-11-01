@@ -1,6 +1,5 @@
 "use"
 import React, { useState } from "react";
-import { RiDeleteBin7Fill } from "react-icons/ri";
 
 const DeleteWithAlert = () => {
   const [showAlert, setShowAlert] = useState(false);
