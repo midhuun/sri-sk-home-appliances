@@ -185,7 +185,9 @@ useEffect(()=>{
       {cartItems?.map((item: ProductType) => (
         <div key={item._id} className="flex  justify-between p-3 border rounded-lg">
           {/* Image */}
-          <img
+          <Image
+           width={200}
+           height={200}
             src={item.image}
             alt={item.name}
             className="w-16 h-16 md:h-[100px] md:w-[100px] object-cover rounded-lg"
