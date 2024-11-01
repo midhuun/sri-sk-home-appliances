@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import React from 'react'
 import useSWR from 'swr';
-const page = () => {
+const Page = () => {
 const {subcategory}:any = useParams();
 const subName:any = decodeURIComponent(subcategory);
 const fetcher = (url:any) => fetch(url).then((res)=>res.json());

@@ -13,7 +13,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch, useAppSelector } from '@/app/store/store';
 import { addToFavourite } from '@/app/store/FavouriteSlice';
 
-const page = () => {
+const Page = () => {
   const { product }: any = useParams();
   const subName: any = decodeURIComponent(product);
   console.log(product);
