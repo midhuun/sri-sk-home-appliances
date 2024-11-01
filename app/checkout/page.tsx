@@ -20,7 +20,7 @@ const Checkout = () => {
   const [isOrderConfirmed, setIsOrderConfirmed] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
   
-  async function handlePincodeFetch(value) {
+  async function handlePincodeFetch(value:any) {
     setPincode(value);
     setError(""); // Reset any previous error
     try {

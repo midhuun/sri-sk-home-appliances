@@ -2,7 +2,6 @@
 import Card from '@/app/components/Card';
 import Error from '@/app/components/Error';
 import Loading from '@/app/components/Loading';
-import { Product } from '@/app/types/ProductType';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import React from 'react'
@@ -22,7 +21,7 @@ console.log(data?.message?.products);
     {isLoading && <Loading/>}
     {error && <Error/>}
     <div className='lg:px-[5%] flex gap-4 flex-wrap justify-center md:justify-normal'>
-    {data?.message?.products && data?.message?.products?.map((product:Product)=>
+    {data?.message?.products && data?.message?.products?.map((product:any)=>
     <Link key={product._id} href={`/subcategory/${subcategory}/product/${product.name}`}>
     <Card price={product.price}  name={product.name} image={product.image[0]} description={product.description} />
     </Link>
@@ -32,4 +31,4 @@ console.log(data?.message?.products);
   )
 }
 
-export default page
+export default Page;

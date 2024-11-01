@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import React, { lazy } from 'react';
+import React from 'react';
 
 interface CategoryCardProps {
   name: string;

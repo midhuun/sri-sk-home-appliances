@@ -23,10 +23,7 @@ import { deleteCookie, getCookie, setCookie } from "cookies-next";
 export default  function Header() {
   const [userData,setuserData] = useState<any>({});  
 useEffect(()=>{
-  const token = getCookie("usertoken")
   const storedData = getCookie("data")
-
-  console.log(data);
   
   if (storedData) {
       const user = JSON.parse(storedData);

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { IoAddOutline } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
 import useSWR from "swr";
-import { Category, Product, SubCategory } from '@/app/types/ProductType';
+import { Category } from '@/app/types/ProductType';
 import Loading from "@/app/components/Loading";
 import Error from "@/app/components/Error";
 import { RiDeleteBin7Fill } from "react-icons/ri";
@@ -258,7 +258,7 @@ const Product = () => {
             <p className='md:w-1/4'>quantity</p>
           </div>
         </div>
-        {data?.message?.subcategories.length > 0 && data?.message?.product.map((product:Product) =>
+        {data?.message?.subcategories.length > 0 && data?.message?.product.map((product:any) =>
           <div key={product._id} className="flex relative items-center w-full lg:text-sm text-[12px] py-2 justify-between px-2 md:px-[5%]">
             <div className="absolute right-5 top-5 flex justify-center  items-center">
         <button onClick={()=>deleteCategory(product._id)} className="relative p-2 bg-red-50 hover:bg-red-100 text-red-400 hover:text-red-600 rounded-full shadow-md transition-all duration-300 ease-in-out group">

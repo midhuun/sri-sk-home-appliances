@@ -1,5 +1,4 @@
 "use client";
-import Card from '@/app/components/Card';
 import Error from '@/app/components/Error';
 import { PiHeartbeatLight } from "react-icons/pi";
 import Loading from '@/app/components/Loading';
@@ -112,4 +111,4 @@ const Page = () => {
   )
 }
 
-export default page;
+export default Page;

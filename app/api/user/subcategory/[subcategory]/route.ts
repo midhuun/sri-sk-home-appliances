@@ -1,4 +1,4 @@
-import { Category, Product, SubCategory } from '@/app/lib/models/productModel';
+import {  SubCategory } from '@/app/lib/models/productModel';
 import { NextResponse } from 'next/server';
 
 export async function GET(req: Request) {

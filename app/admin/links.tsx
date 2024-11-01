@@ -1,7 +1,6 @@
 'use client';
 import { MdSpaceDashboard } from "react-icons/md";
 import { BiSolidCollection } from "react-icons/bi";
-import { MdCategory } from "react-icons/md";
 import { BiSolidCategory } from "react-icons/bi";
 import { IoBagHandle } from "react-icons/io5";
 import { RiUser3Fill } from "react-icons/ri";
