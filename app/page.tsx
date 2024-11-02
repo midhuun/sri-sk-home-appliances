@@ -4,7 +4,7 @@ import Card from "./components/Card";
 import { getItem } from "./components/products";
 import Link from "next/link";
 import useSWR from "swr";
-export default  async function Home() {
+export default  function Home() {
   const fetcher = (url:any) => fetch(url).then((res)=>res.json());
 const { data, error, isLoading } = useSWR(
   `/api/user`,
