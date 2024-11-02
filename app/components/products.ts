@@ -1,6 +1,7 @@
 export async function getItem() {
-    // The `fetch` function is automatically memoized and the result
-    // is cached
-    const res = await fetch('http://localhost:3000/api/user', { next: { revalidate: 100 } },);
-        return res.json()
+     try{
+    const res = await fetch('http://127.0.0.1:3000/api/user', { next: { revalidate: 100 } },);
+        return res.json()}
+        catch (error) {  console.error(error); }
+
   }

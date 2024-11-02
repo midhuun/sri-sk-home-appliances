@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
      
-      <body className={`${inter.className} bg-[#FFFFFF] dark:text-[#E0E0E0] dark:bg-[#181C14] text-[#333333]`}      >
+      <body className={`${inter.className} bg-[#FFFFFF] dark:text-[#E0E0E0] dark:bg-gray-900 text-[#333333]`}      >
       <SessionWrapper>
       <Theme>
         <ReduxProvider>

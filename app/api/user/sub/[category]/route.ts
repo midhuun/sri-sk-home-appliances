@@ -1,7 +1,9 @@
+import { connectToDB } from '@/app/lib/db';
 import { Category } from '@/app/lib/models/productModel';
 import { NextResponse } from 'next/server';
 
 export async function GET(req: Request) {
+  await connectToDB();
   try {
     const url =req.url;
     const parts = url.split('/');  // Splitting the URL by '/'

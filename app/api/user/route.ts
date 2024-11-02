@@ -1,7 +1,9 @@
+import { connectToDB } from '@/app/lib/db';
 import { Category, Product, SubCategory } from '@/app/lib/models/productModel';
 import { NextResponse } from 'next/server';
 
 export async function GET(req: Request) {
+  await connectToDB();
   try {
     const categories = await Category.find().populate('subcategories').select('-earnings -total');
     const subcategories:any = await SubCategory.find({}).populate('products','name description image price colors subcategory').select('-earnings -total')
@@ -18,3 +20,10 @@ export async function GET(req: Request) {
     );
   }
 }
+
+
+// import { connectToDB } from './app/lib/db';
+
+// export async function register() {
+//     await connectToDB();
+// }

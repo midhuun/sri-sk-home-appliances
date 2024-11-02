@@ -96,7 +96,7 @@ useEffect(()=>{
     setloginmsg("Logging in")
     e.preventDefault();
     try{
-    const res = await fetch('http://localhost:3000/api/user/login',
+    const res = await fetch('http://127.0.0.1:3000/api/user/login',
       {
         method:'POST',
         body:JSON.stringify(loginData)
@@ -142,7 +142,7 @@ useEffect(()=>{
         alert("Passwords do not match");
         return;
     }
-    const res = await fetch('http://localhost:3000/api/user/register',
+    const res = await fetch('http://127.0.0.1:3000/api/user/register',
       {
         method:'POST',
         body:JSON.stringify(registerData)
@@ -162,7 +162,7 @@ useEffect(()=>{
     <div>
       {/* Cart Page */}
       <div
-  className={`fixed top-0 right-0 h-screen w-[300px] md:w-[500px] z-[100] dark:bg-[#1d1e1d] bg-white transition-transform duration-300 ${
+  className={`fixed top-0 right-0 h-screen w-[300px] md:w-[500px] z-[100] dark:bg-gray-900 border-l border-l-slate-200 dark:border-l-gray-800 bg-white transition-transform duration-300 ${
     iscartOpen ? "translate-x-0" : "translate-x-full"
   }`}
 >
@@ -185,7 +185,7 @@ useEffect(()=>{
           <Image
            width={200}
            height={200}
-            src={item.image}
+            src={item.image[0]}
             alt={item.name}
             className="w-16 h-16 md:h-[100px] md:w-[100px] object-cover rounded-lg"
           />
@@ -240,7 +240,7 @@ useEffect(()=>{
 </div>
       {/* Favourite Page */}
       <div
-  className={`fixed top-0 right-0 h-screen w-[300px] md:w-[500px] z-[100] dark:bg-[#1d1e1d] bg-white transition-transform duration-300 ${
+  className={`fixed top-0 right-0 h-screen w-[300px] md:w-[500px] z-[100] dark:bg-gray-900 border-l border-l-slate-200 dark:border-l-gray-800 bg-white transition-transform duration-300 ${
     isFavouriteOpen ? "translate-x-0" : "translate-x-full"
   }`}
 >
@@ -255,24 +255,26 @@ useEffect(()=>{
     <h3 className="text-xl font-semibold mb-5">Favourites</h3>
      <hr />
     <div className="space-y-4 mt-5">
+      {favourite.length==0 && <p className="space-y-2 text-gray-500">Your Favourites is Empty </p>}
       {favourite?.map((item: ProductType) => (
-        <div key={item._id} className="flex  justify-between p-3 border rounded-lg">
+        <div key={item._id} className="flex  justify-start p-3 border rounded-lg">
           {/* Image */}
-          <img
-            src={item.image}
+          <Image height={200} width={200}
+            src={item.image[0]}
             alt={item.name}
             className="w-16 h-16 md:h-[100px] md:w-[100px] object-cover rounded-lg"
           />
           {/* Name and Quantity Controls */}
-          <div className="flex-1 justify-center  items-center ml-4">
+          <div className="mx-2">
             <h4 className="text-md ">{item.name.length>20 ?item.name.slice(0,40)+'...':item.name}</h4>
             <span className="text-[12px] my-2">₹ {item.price}</span>
             <button
               onClick={() => dispatch(removeFromFavourite(item))}
-              className="text-red-500 mx-3"
+              className="text-white text-[12px] my-2 p-2 rounded-md flex hover:bg-red-600 bg-red-500 items-center  justify-center "
               aria-label="Remove from favourites"
             >
-              <PiHeartStraightBreak size={18} />
+            <p className="ml-1">Remove</p>
+              <PiHeartStraightBreak className="mx-[6px]" size={18} />
             </button>
           </div>
 
@@ -283,7 +285,7 @@ useEffect(()=>{
 </div>
       {/* Register Page */}
 {session || userData.name ? <div
-  className={`fixed top-0 right-0 h-screen w-[300px] md:w-[300px] z-[100] dark:bg-[#1d1e1d] bg-white transition-transform duration-300 ${
+  className={`fixed top-0 right-0 h-screen w-[300px] md:w-[300px] z-[100] dark:bg-gray-900 border-l border-l-slate-200 dark:border-l-gray-800 bg-white transition-transform duration-300 ${
     isUserClicked ? "translate-x-0" : "translate-x-full"
   }`}
 >
@@ -305,7 +307,9 @@ useEffect(()=>{
   <div className="">
     <p className="flex  py-4 dark:hover:bg-white dark:hover:text-black hover:bg-black hover:text-white cursor-pointer gap-3 items-center"><LuUser className="ml-4" size={24} />My Profile</p>
     <hr />
+    <Link href='/orders'>
     <p  className="flex py-4 dark:hover:bg-white dark:hover:text-black hover:bg-black hover:text-white cursor-pointer gap-3 items-center"><IoBagCheckOutline className="ml-4" size={24} />My Orders</p>
+    </Link>
   <hr />
   <p onClick={()=>{setiscartOpen(true); setisUserClicked(false)}} className="flex py-4 dark:hover:bg-white dark:hover:text-black hover:bg-black hover:text-white cursor-pointer gap-3 items-center"><IoBagAddOutline className="ml-4" size={24} />Cart</p>
   <hr />
@@ -445,7 +449,7 @@ useEffect(()=>{
           <div onClick={()=>setisfavouriteOpen(!isFavouriteOpen)}  className="relative">
             <GoHeart size={26} />
             <span className="absolute -top-2 -right-2 h-5 w-5 bg-red-500 text-white text-xs flex justify-center items-center rounded-full">
-              5
+              {favourite.length}
             </span>
           </div>
           <div onClick={()=>setiscartOpen(!iscartOpen)} className="relative cursor-pointer">

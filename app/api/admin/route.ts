@@ -2,14 +2,16 @@ import { Category, Product, SubCategory } from '@/app/lib/models/productModel';
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers'
 import jwt, { Secret }  from 'jsonwebtoken';
+import { connectToDB } from '@/app/lib/db';
  export async function GET(req:Request):Promise<Response> {
+  await connectToDB();
   const cookieStore = await cookies()
   const token = cookieStore.get('usertoken')
   console.log(token?.value);
  const data:any = jwt.verify(token?.value || 'password',process.env.SECRET_KEY || 'Xb7wDALMRA' as Secret);
  console.log(data);
  if(data?.email !=='subash.kannan@gmail.com'){
-  return NextResponse.json({ message:"User Not Authorized"},{status:500});
+  return NextResponse.json({ message:"User Not Authorized"},{status:200});
  }
 
     const categories= await Category.find();
@@ -20,6 +22,7 @@ import jwt, { Secret }  from 'jsonwebtoken';
 
  }
  export async function POST(req: Request): Promise<Response> {
+  await connectToDB();
   const formDatas = await req.formData();
   const images:any = formDatas.get('images');
   console.log(images);

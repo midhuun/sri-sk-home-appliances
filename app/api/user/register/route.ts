@@ -2,7 +2,9 @@ import { headers } from "next/headers";
 import { User } from "@/app/lib/models/userModel";
 import { NextResponse } from "next/server";
 import jwt  from 'jsonwebtoken';
+import { connectToDB } from "@/app/lib/db";
 export async function POST(req:Request){
+   await connectToDB();
    const headersList = headers();
    console.log(headersList.get('authorization'));
    const {fullName,email,phone,password}= await req.json();

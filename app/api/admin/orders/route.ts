@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import { Orders } from "@/app/lib/models/orderModel";
 import { User } from "@/app/lib/models/userModel";
+import { connectToDB } from "@/app/lib/db";
 export async function POST(req:Request): Promise<Response> {
+   await connectToDB();
     const data =  await req.json();
     console.log(data);    
     try{
