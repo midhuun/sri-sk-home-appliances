@@ -96,7 +96,7 @@ useEffect(()=>{
     setloginmsg("Logging in")
     e.preventDefault();
     try{
-    const res = await fetch('http://127.0.0.1:3000/api/user/login',
+    const res = await fetch('https://sk-home-appliancess.vercel.app/api/user/login',
       {
         method:'POST',
         body:JSON.stringify(loginData)
@@ -142,7 +142,7 @@ useEffect(()=>{
         alert("Passwords do not match");
         return;
     }
-    const res = await fetch('http://127.0.0.1:3000/api/user/register',
+    const res = await fetch('https://sk-home-appliancess.vercel.app/api/user/register',
       {
         method:'POST',
         body:JSON.stringify(registerData)
