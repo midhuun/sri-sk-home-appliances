@@ -22,7 +22,7 @@ const Poster = () => {
       </div>
 
       {/* Text and Button Section */}
-      <div className="md:relative hidden z-10 bg-white/70 dark:bg-gray-700/70 p-5 md:p-8 rounded-lg shadow-md opacity-0 transition-opacity duration-1000 delay-500 animate-fadeInUp text-center md:text-left max-w-sm md:max-w-md">
+      <div className="relative hidden md:block z-10 bg-white/70 dark:bg-gray-700/70 p-5 md:p-8 rounded-lg shadow-md opacity-0 transition-opacity duration-1000 delay-500 animate-fadeInUp text-center md:text-left max-w-sm md:max-w-md">
         <h1 className="text-lg md:text-2xl lg:text-3xl font-bold uppercase dark:text-gray-100 text-gray-800">
           Save Energy, Save Money!
         </h1>
