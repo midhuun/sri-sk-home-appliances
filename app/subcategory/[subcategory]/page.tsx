@@ -14,7 +14,7 @@ const { data, error, isLoading } = useSWR(
   `/api/user/subcategory/${subName}`,
   fetcher
 );
-console.log(data?.message?.products);
+console.log(data?.message);
 
   return (
     <>

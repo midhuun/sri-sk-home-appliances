@@ -9,7 +9,7 @@ export async function GET(req: Request) {
     const parts = url.split('/');  // Splitting the URL by '/'
     const id = parts[parts.indexOf('sub') + 1];  // Getting the value after 'sub'
     console.log(id);  // Output: 123
-    const category:any = await Category.findOne({name:id}).populate('subcategories');
+    const category:any = await Category.findOne({name:decodeURIComponent(id)}).populate('subcategories');
     return NextResponse.json(
       { message:category },
       { status: 200 }

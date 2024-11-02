@@ -13,7 +13,7 @@ export default  function Category() {
     `/api/user/sub/${category}`,
     fetcher
   );
-  console.log(data?.message?.subcategories);
+  console.log(data?.message);
   
   return (
     <>

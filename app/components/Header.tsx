@@ -142,7 +142,7 @@ useEffect(()=>{
         alert("Passwords do not match");
         return;
     }
-    const res = await fetch('https://sri-sk-home-appliances-2.vercel.app/api/user/register',
+    const res = await fetch('https://sri-sk-home-appliances.vercel.app/api/user/register',
       {
         method:'POST',
         body:JSON.stringify(registerData)

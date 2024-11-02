@@ -4,7 +4,7 @@ import { getItem } from "./components/products";
 import Link from "next/link";
 export default  async function Home() {
   const products:any =await getItem();
-  
+
   return (
     <main className="flex min-h-screen flex-col  px-1 md:px-8">
       <div className="in space-y-5 md:pl-[5%]">
@@ -18,7 +18,7 @@ export default  async function Home() {
 </div>
 
           <h1 className="text-[16px] md:text-[20px] py-5 font-bold uppercase">{sub.name}</h1> 
-          <div className="flex justify-center flex-wrap gap-3">
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
           {sub.products?.map((product:any)=>
           <Link key={product._id}   href={`/subcategory/${sub.name}/product/${product.name}`}> <Card price={product.price}  name={product.name} image={product.image[0]} description={product.description}  /></Link>
         )}

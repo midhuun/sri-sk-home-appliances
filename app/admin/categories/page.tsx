@@ -15,6 +15,7 @@ const Categories = () => {
     "/api/admin",
     fetcher
   );
+  const [clickedState,setclickedState] = useState(false)
   const [name, setName] = useState("");
   const [file, setFile] = useState<any>(null); 
   const [description, setDescription] = useState("");
@@ -31,6 +32,8 @@ const Categories = () => {
   } 
   // Handle form submission
   const  handleSubmit = async(e:any) => {
+    setclickedState(true);
+    e.preventDefault(); 
     console.log("Clicked");
     const uploadedUrls:any = [];
     const imageData = new FormData();
@@ -50,7 +53,6 @@ const Categories = () => {
       } catch (error) {
         console.error('Failed to upload image:', error);
       }
-    e.preventDefault(); 
     const formData = new FormData();
     formData.append("categoryName", name);
     if(uploadedUrls.length>0){
@@ -62,10 +64,12 @@ const Categories = () => {
       body:formData
     })
     const results:{message:[]} = await body.json();
+    setclickedState(false)
     window.location.reload();
     console.log(results);
     
   };
+  if(clickedState) <Loading/>
   if (error) return <Error />
   if (!data) return <Loading/>
   return (
@@ -159,7 +163,7 @@ const Categories = () => {
         
         <div className="w-[80%]">
           <div className="flex items-center gap-5">
-          <Image width={40} height={40} className='hidden md:block object-cover h-10 w-10 border p-1' alt="image"  src={category.image} />
+          <Image width={40} height={40} className='hidden md:block object-cover h-10 w-10 border p-1' alt="image"  src={category.image || "https://picsum.photos/200/300"} />
           <div>
           <p className="text-sm ">{category?.name?.split(" ").slice(0,5).join("")}</p>
           <p className="text-[12px] text-slate-400">{category?.description?.split(" ").slice(0,5).join("")}</p>

@@ -8,10 +8,11 @@ export async function GET(req: Request) {
     const url =req.url;
     const parts = url.split('/'); 
     const id = parts[parts.indexOf('subcategory') + 1];  // Getting the value after 'sub'
+    console.log("id",decodeURIComponent(id));
     const subCategory:any = await SubCategory.findOne({name:decodeURIComponent(id)}).populate('products');
     return NextResponse.json(
       { message:subCategory },
-      { status: 200 }
+      { status: 200 } 
     );
   } catch (error:any) {
     return NextResponse.json(

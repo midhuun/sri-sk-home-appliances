@@ -10,6 +10,8 @@ import { RiDeleteBin7Fill } from "react-icons/ri";
 import Image from "next/image";
 
 const SubCategories = () => {
+  const [clickedState,setclickedState] = useState(false)
+
   const [iscategoryAdd, setiscategoryAdd] = useState(false);
   const [isLoading,setisLoading] = useState(false);
   const fetcher = (url: any) => fetch(url).then((res) => res.json());
@@ -29,6 +31,7 @@ const SubCategories = () => {
     
   } 
   const handleSubmit = async (e: any) => {
+    setclickedState(true)
     setisLoading(true);
     e.preventDefault();
     const uploadedUrls:any = [];
@@ -62,8 +65,12 @@ const SubCategories = () => {
     });
     const results = await response.json();
     console.log(results);
+    setclickedState(true)
+    window.location.reload();
     setisLoading(false)
   };
+  if(clickedState) <Loading/>
+
   if (error) return <Error />
   if (!data) return <Loading/>
   console.log("Red");
