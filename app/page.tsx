@@ -1,14 +1,19 @@
+"use client";
 import Image from "next/image";
 import Card from "./components/Card";
 import { getItem } from "./components/products";
 import Link from "next/link";
+import useSWR from "swr";
 export default  async function Home() {
-  const products:any =await getItem();
-
+  const fetcher = (url:any) => fetch(url).then((res)=>res.json());
+const { data, error, isLoading } = useSWR(
+  `/api/user`,
+  fetcher
+);
   return (
     <main className="flex min-h-screen flex-col  px-1 md:px-8">
       <div className="in space-y-5 md:pl-[5%]">
-        {products?.message?.subcategories?.map((sub:any)=>
+        {data?.message?.subcategories?.map((sub:any)=>
         <div key={sub._id}>
           <div>
           <div>
