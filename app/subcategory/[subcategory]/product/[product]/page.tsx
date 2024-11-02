@@ -41,7 +41,7 @@ const Page = () => {
       {isLoading && <Loading />}
       {error && <Error />}
       {data?.message && (
-        <div className='md:flex pt-7 px-4 md:pt-[100px] justify-center md:gap-7 space-y-4 '>
+        <div className='md:flex pt-7 px-4 md:pt-[20px] justify-center md:gap-7 space-y-4 '>
            <div className='md:flex flex-col items-center hidden space-y-4 pt-4'>
               {productdetails?.image.map((img: string, index: number) => (
                 <div key={index} className='cursor-pointer border ' onClick={() => setMainImage(img)}>
@@ -60,7 +60,7 @@ const Page = () => {
             <Image 
               width={1000} 
               height={1000} 
-              className='h-[500px] md:h-[500px] object-contain ' 
+              className='h-[250px] md:h-[500px] object-contain ' 
               src={mainImage ||  productdetails?.image[0]} 
 
               alt={productdetails?.name} 

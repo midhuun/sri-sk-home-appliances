@@ -13,12 +13,12 @@ const Card = ({ name, image, description, price }: Product) => {
   const shortdesc = description?.split(" ").slice(0, 5).join(" ");
   return (
     <div className="flex justify-center flex-wrap gap-3">
-      <div className="flex flex-col h-[300px] w-full md:w-[280px] hover:border border-black dark:border-white overflow-hidden relative group">
+      <div className="flex flex-col h-[250px] md:h-[350px] w-full md:w-[300px] hover:border border-black dark:border-white overflow-hidden relative group">
         <div className='relative bg-white dark:bg-gray-800'>
           <Image
-            style={{ objectFit: "cover" }}
-            height={1000}
-            width={1000}
+            style={{ objectFit: "contain" }}
+            height={400}
+            width={400}
             alt={name}
             src={image}
             className="w-full transition-transform duration-300 group-hover:scale-105 md:h-56 h-[150px] object-cover"
@@ -28,8 +28,8 @@ const Card = ({ name, image, description, price }: Product) => {
           </p>
         </div>
         <div className="p-4 h-[120px]">
-          <p className="text-sm md:text-lg font-medium text-gray-800 dark:text-gray-300">{shortname}</p>
-          <p className="text-gray-500">{shortdesc}....</p>
+          <p className="text-[14px] md:text-[18px] pb-1 font-medium text-gray-800 dark:text-gray-300">{shortname}</p>
+          <p className="text-gray-500 text-[12px] md:text-md">{shortdesc}....</p>
         </div>
       </div>
     </div>

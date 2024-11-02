@@ -320,127 +320,122 @@ useEffect(()=>{
   </div>
 </div>
 
-</div>:<> 
-<div 
-    className={`fixed inset-0 bg-black z-[100] bg-opacity-50 backdrop-blur-sm transition-opacity ${isRegister || isUserClicked ? "block" : "hidden"}`} 
-    onClick={() => { setIsregister(false); setisUserClicked(false); }} 
-  >
+</div>:<>
+  {/* Overlay */}
+  <div 
+    className={`fixed inset-0 w-full h-full bg-black bg-opacity-50 backdrop-blur-sm z-[100] transition-opacity ${isRegister || isUserClicked ? "block" : "hidden"}`} 
+    onClick={() => { setIsregister(false); setisUserClicked(false); }}
+  />
 
-  </div>
-  <div className={`w-[250px] md:w-[400px] h-auto bg-white dark:bg-[#181C14] border z-[100] ${isRegister?"absolute":"hidden"} top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  rounded-lg shadow-lg`}>
-  <div className="p-8 relative">
-    <button onClick={()=>setIsregister(false)} className="absolute top-1 hover:text-red-500 dark:hover:text-red-400 right-3 text-xl">✕</button>
+  {/* Register Modal */}
+  <div className={`w-[90%] max-w-[400px] h-auto bg-white dark:bg-[#181C14] border z-[101] ${isRegister ? "fixed" : "hidden"} top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-lg`}>
+    <div className="p-8 relative">
+      <button onClick={() => setIsregister(false)} className="absolute top-1 hover:text-red-500 dark:hover:text-red-400 right-3 text-xl">✕</button>
+      <h2 className="text-2xl font-bold dark:text-white text-center mb-6">Register</h2>
+      
+      <form onSubmit={handleRegisterSubmit}>
+        {/* Full Name */}
+        <div className="mb-4">
+          <label htmlFor="fullName" className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Full Name</label>
+          <input type="text" required name="fullName" value={registerData.fullName} onChange={handleRegisterChange} id="fullName" className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Enter your full name" />
+        </div>
 
-    <h2 className="text-2xl font-bold dark:text-white text-center mb-6">Register</h2>
-    
-    <form onSubmit={handleRegisterSubmit}>
-      <div className="mb-4">
-        <label htmlFor="fullName" className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Full Name</label>
-        <input type="text" required name="fullName"
-        value={registerData.fullName}
-        onChange={handleRegisterChange}
-         id="fullName" className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Enter your full name"  />
+        {/* Email */}
+        <div className="mb-4">
+          <label htmlFor="email" className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Email</label>
+          <input type="email" name="email" value={registerData.email} onChange={handleRegisterChange} id="email" className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Enter your email" required />
+        </div>
+
+        {/* Phone */}
+        <div className="mb-4">
+          <label htmlFor="phone" className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Phone Number</label>
+          <input type="tel" required name="phone" value={registerData.phone} onChange={handleRegisterChange} id="phone" className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Enter your phone number" />
+        </div>
+
+        {/* Password */}
+        <div className="mb-4">
+          <label htmlFor="password" className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Password</label>
+          <input type="password" required name="password" value={registerData.password} onChange={handleRegisterChange} className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Enter your password" />
+        </div>
+
+        {/* Confirm Password */}
+        <div className="mb-6">
+          <label htmlFor="confirmPassword" className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Confirm Password</label>
+          <input type="password" required name="confirmPassword" value={registerData.confirmPassword} onChange={handleRegisterChange} id="confirmPassword" className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Confirm your password" />
+        </div>
+
+        <button type="submit" className="w-full bg-blue-500 dark:bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors">Register</button>
+      </form>
+
+      <div className="flex items-center justify-between mt-4">
+        <p className="text-sm text-gray-600 dark:text-gray-300">Already have an account?</p>
+        <p onClick={LoginCLick} className="text-blue-500 cursor-pointer dark:text-blue-400 hover:underline">Login here</p>
       </div>
-
-      <div className="mb-4">
-        <label htmlFor="email"  className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Email</label>
-        <input type="email"  name="email"
-         value={registerData.email}
-         onChange={handleRegisterChange}
-         id="email" className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Enter your email" required />
-      </div>
-
-      <div className="mb-4">
-        <label htmlFor="phone"  className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Phone Number</label>
-        <input type="tel" required  name="phone"
-        value={registerData.phone}
-        onChange={handleRegisterChange}
-        id="phone" className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Enter your phone number"  />
-      </div>
-
-      <div className="mb-4">
-        <label htmlFor="password" className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Password</label>
-        <input type="password" required name="password"
-         value={registerData.password}
-         onChange={handleRegisterChange}
-          className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Enter your password"  />
-      </div>
-
-      <div className="mb-6">
-        <label htmlFor="confirmPassword" className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Confirm Password</label>
-        <input type="password" required name="confirmPassword"
-        value={registerData.confirmPassword}
-        onChange={handleRegisterChange}
-         id="confirmPassword" className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Confirm your password"  />
-      </div>
-
-      <button  type="submit" className="w-full bg-blue-500 dark:bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors">Register</button>
-    </form>
-
-    <div className="flex items-center justify-between mt-4">
-      <p className="text-sm text-gray-600 dark:text-gray-300">Already have an account?</p>
-      <p onClick={LoginCLick} className="text-blue-500 cursor-pointer dark:text-blue-400 hover:underline">Login here</p>
     </div>
   </div>
-</div>
-<div className={`w-[400px] bg-white dark:bg-[#181C14] h-auto border dark:border-gray-700 z-[100] ${isUserClicked?"absolute":"hidden"} top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-lg`}>
-  <div className="relative p-8">
-    <button onClick={()=>setisUserClicked(false)} className="absolute top-1 hover:text-red-500 dark:hover:text-red-400 right-3 text-xl">✕</button>
-    
-    <h2 className="text-2xl font-bold dark:text-white text-center mb-6">Login</h2>
-    
-    <form onSubmit={handleLoginSubmit}>
-      <div className="mb-4">
-        <label htmlFor="username" className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Mobile or Email</label>
-        <input  name="username"
-        value={loginData.username}
-        onChange={handleLoginChange}
-         type="text" id="username" className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Enter your mobile or email" />
+
+  {/* Login Modal */}
+  <div className={`w-[90%] max-w-[400px] bg-white dark:bg-[#181C14] h-auto border dark:border-gray-700 z-[101] ${isUserClicked ? "fixed" : "hidden"} top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-lg`}>
+    <div className="relative p-8">
+      <button onClick={() => setisUserClicked(false)} className="absolute top-1 hover:text-red-500 dark:hover:text-red-400 right-3 text-xl">✕</button>
+      <h2 className="text-2xl font-bold dark:text-white text-center mb-6">Login</h2>
+      
+      <form onSubmit={handleLoginSubmit}>
+        {/* Username */}
+        <div className="mb-4">
+          <label htmlFor="username" className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Mobile or Email</label>
+          <input name="username" value={loginData.username} onChange={handleLoginChange} type="text" id="username" className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Enter your mobile or email" />
+        </div>
+
+        {/* Password */}
+        <div className="mb-6">
+          <label htmlFor="password" className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Password</label>
+          <input type="password" name="password" value={loginData.password} onChange={handleLoginChange} id="password" className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Enter your password" />
+        </div>
+
+        <button type="submit" className="w-full bg-blue-500 dark:bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors">{loginmsg}</button>
+      </form>
+
+      <div className="flex items-center justify-between mt-4">
+        <p className="text-sm text-gray-600 dark:text-gray-300">New user?</p>
+        <p onClick={registerClick} className="text-blue-500 cursor-pointer dark:text-blue-400 hover:underline">Register here</p>
       </div>
 
-      <div className="mb-6">
-        <label htmlFor="password" className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Password</label>
-        <input type="password" name="password"
-        value={loginData.password}
-        onChange={handleLoginChange}
-         id="password" className="w-full px-3 py-2 border dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-200 dark:bg-[#181C14] focus:outline-none focus:border-blue-500" placeholder="Enter your password" />
+      <div className="my-4 flex items-center justify-center">
+        <span className="border-t dark:border-gray-700 w-full"></span>
+        <span className="px-4 text-gray-500 dark:text-gray-300">OR</span>
+        <span className="border-t dark:border-gray-700 w-full"></span>
       </div>
 
-      <button type="submit" className="w-full bg-blue-500 dark:bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors">{loginmsg}</button>
-    </form>
-
-    <div className="flex items-center justify-between mt-4">
-      <p className="text-sm text-gray-600 dark:text-gray-300">New user?</p>
-      <p onClick={registerClick} className="text-blue-500 cursor-pointer dark:text-blue-400 hover:underline">Register here</p>
+      <button onClick={() => signIn('google')} className="w-full hover:bg-black dark:hover:bg-gray-700 duration-300 hover:text-white py-2 rounded-lg bg-white dark:bg-gray-800 border dark:border-gray-700 text-black dark:text-gray-300 transition-colors flex items-center justify-center">
+        <svg className="w-5 h-5 mr-2" viewBox="0 0 48 48">
+          <path fill="#EA4335" d="M24 9.5c3.3 0 6.3 1.3 8.6 3.7l6.3-6.3C34.8 3.3 29.7 1 24 1 14.9 1 7.1 6.7 4 14.6l7.3 5.7C13.5 14.3 18.3 9.5 24 9.5z" />
+          <path fill="#34A853" d="M46.5 24c0-1.5-.1-3-.4-4.4H24v8.4h12.8c-.6 3.4-2.4 6.4-5.2 8.3l7.9 6.2c4.5-4.1 7-10.2 7-17.5z" />
+          <path fill="#FBBC05" d="M10.7 29.9c-1.4-2-2.2-4.3-2.2-6.9s.8-4.9 2.2-6.9L4 10.5C1.5 14.3 0 19 0 24s1.5 9.7 4 13.5l6.7-7.5z" />
+          <path fill="#4285F4" d="M24 48c6.5 0 12-2.2 15.9-6.1l-7.9-6.2c-2.1 1.4-4.7 2.2-7.5 2.2-5.7 0-10.5-3.8-12.2-9l-7.3 5.7C7.1 41.3 14.9 48 24 48z" />
+        </svg>
+        Sign in with Google
+      </button>
     </div>
-
-    <div className="my-4 flex items-center justify-center">
-      <span className="border-t dark:border-gray-700 w-full"></span>
-      <span className="px-4 text-gray-500 dark:text-gray-300">OR</span>
-      <span className="border-t dark:border-gray-700 w-full"></span>
-    </div>
-
-    <button onClick={()=>signIn('google')} className="w-full hover:bg-black dark:hover:bg-gray-700 duration-300 hover:text-white py-2 rounded-lg bg-white dark:bg-gray-800 border dark:border-gray-700 text-black dark:text-gray-300 transition-colors flex items-center justify-center">
-      <svg className="w-5 h-5 mr-2" viewBox="0 0 48 48">
-        <path fill="#EA4335" d="M24 9.5c3.3 0 6.3 1.3 8.6 3.7l6.3-6.3C34.8 3.3 29.7 1 24 1 14.9 1 7.1 6.7 4 14.6l7.3 5.7C13.5 14.3 18.3 9.5 24 9.5z" />
-        <path fill="#34A853" d="M46.5 24c0-1.5-.1-3-.4-4.4H24v8.4h12.8c-.6 3.4-2.4 6.4-5.2 8.3l7.9 6.2c4.5-4.1 7-10.2 7-17.5z" />
-        <path fill="#FBBC05" d="M7.3 28.3c-1.1-3.3-1.1-6.9 0-10.2l-7.3-5.7c-3.5 6.9-3.5 15.1 0 22l7.3-5.7z" />
-        <path fill="#4285F4" d="M24 47c5.7 0 10.5-1.9 14-5.2l-7.9-6.2c-2.2 1.4-5 2.2-8 2.2-5.7 0-10.5-3.9-12.2-9.1l-7.3 5.7C7.1 41.3 14.9 47 24 47z" />
-      </svg>
-      Continue with Google
-    </button>
   </div>
-</div></>}
+</>
+}
      
 
       {/* Main Header */}
       <div className="flex h-[60px] md:h-[100px] md:p-5 p-2 justify-between items-center">
+        <div className="flex justify-center items-center space-x-4">
         <CgMenuLeftAlt
           onClick={() => setIsMenuOpen(true)}
           className="cursor-pointer"
           size={30}
         />
-        <p className="font-extrabold text-lg md:text-[30px]">SRI SK</p>
+        <Image height={100} width={100} className="md:w-10 md:h-10 h-8 w-8 rounded-full" alt="logo" src='/logo.png' />
+        </div>
+       <div className="text-center hidden md:flex  flex-col items-center">
+    <p className="font-extrabold text-xl md:text-[30px] tracking-wider text-blue-600">SK BRAND</p>
+    <span className="text-sm text-gray-500 tracking-widest">Premium Collection</span>
+  </div>
         <div className="flex gap-3 md:gap-4 cursor-pointer items-center relative">
           <ThemeSwitch />
           <div onClick={()=>setisUserClicked(!isUserClicked)} className="">
@@ -474,7 +469,9 @@ useEffect(()=>{
           ✕
         </button> 
         <div className="p-5">
-          <Link href='/' className="text-blue-600 hover:text-blue-700 transition-all duration-400"><h2 className="text-2xl font-bold mb-7">Home</h2></Link>
+          <Link href='/' onClick={()=>setIsMenuOpen(false)} className=" transition-all duration-400"><h2 className="text-xl flex items-center gap-2 font-bold mb-7">
+            <Image src='/logo.png' className="h-8 w-8 rounded-full border" height={100} width={100} alt="logo" />
+            Home</h2></Link>
           <ul className="space-y-4">
            {data?.message?.categories?.map((category:Category)=>
            <div key={category._id}>

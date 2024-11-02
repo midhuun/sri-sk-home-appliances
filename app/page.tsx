@@ -4,6 +4,7 @@ import Card from "./components/Card";
 import { getItem } from "./components/products";
 import Link from "next/link";
 import useSWR from "swr";
+import Poster from "./components/Poster";
 export default  function Home() {
   const fetcher = (url:any) => fetch(url).then((res)=>res.json());
 const { data, error, isLoading } = useSWR(
@@ -11,8 +12,11 @@ const { data, error, isLoading } = useSWR(
   fetcher
 );
   return (
-    <main className="flex min-h-screen flex-col  px-1 md:px-8">
-      <div className="in space-y-5 md:pl-[5%]">
+    <>
+    <Poster />
+    <main className="flex min-h-screen flex-col py-2  px-1 ">
+      
+      <div className="in space-y-5 px-1">
         {data?.message?.subcategories?.map((sub:any)=>
         <div key={sub._id}>
           <div>
@@ -32,5 +36,6 @@ const { data, error, isLoading } = useSWR(
         </div>)}
       </div>
     </main>
+    </>
   );
 }
