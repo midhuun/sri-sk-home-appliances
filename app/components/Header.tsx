@@ -285,7 +285,7 @@ useEffect(()=>{
 </div>
       {/* Register Page */}
 {session || userData.name ? <div
-  className={`fixed top-0 right-0 h-screen w-[300px] md:w-[300px] z-[100] dark:bg-gray-900 border-l border-l-slate-200 dark:border-l-gray-800 bg-white transition-transform duration-300 ${
+  className={`fixed top-0 right-0 h-screen w-[250px] md:w-[300px] z-[100] dark:bg-gray-900 border-l border-l-slate-200 dark:border-l-gray-800 bg-white transition-transform duration-300 ${
     isUserClicked ? "translate-x-0" : "translate-x-full"
   }`}
 >
@@ -327,7 +327,7 @@ useEffect(()=>{
   >
 
   </div>
-  <div className={`w-[400px] h-auto bg-white dark:bg-[#181C14] border z-[100] ${isRegister?"absolute":"hidden"} top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  rounded-lg shadow-lg`}>
+  <div className={`w-[250px] md:w-[400px] h-auto bg-white dark:bg-[#181C14] border z-[100] ${isRegister?"absolute":"hidden"} top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  rounded-lg shadow-lg`}>
   <div className="p-8 relative">
     <button onClick={()=>setIsregister(false)} className="absolute top-1 hover:text-red-500 dark:hover:text-red-400 right-3 text-xl">✕</button>
 
