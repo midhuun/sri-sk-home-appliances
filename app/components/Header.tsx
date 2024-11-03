@@ -92,38 +92,62 @@ useEffect(()=>{
       [name]: value,
     });
   };
-  const handleLoginSubmit = async(e:any) => {
-    setloginmsg("Logging in")
+  const handleLoginSubmit = async (e: any) => {
     e.preventDefault();
-    try{
-    const res = await fetch('https://sri-sk-home-appliances.vercel.app/api/user/login',
-      {
-        method:'POST',
-        body:JSON.stringify(loginData)
+    try {
+      const res = await fetch('https://sri-sk-home-appliances.vercel.app/api/user/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(loginData),
+      });
+  
+      if (res.status === 404) {
+        alert('Invalid Credentials');
+        return;
       }
-    )
-    const result = await res.json();
-    if(result){
-      setTimeout(() => {
-        setloginmsg("Login Successful");
-        setloginmsg("Login");  
-    }, 2000);
-    
+      
+      if (res.status === 401) {
+        alert('Invalid Password');
+        return;
+      }
+  
+      if (!res.ok) {
+        alert('Something went wrong. Please try again.');
+        return;
+      }
+  
+      const result = await res.json();
+  
+      if (result && result.message) {
+        const user = result.message;
+  
+        setTimeout(() => {
+          setloginmsg("Login Successful");
+        }, 2000);
+  
+        setCookie('usertoken', user.token, { maxAge: 60 * 60 * 24 });
+        setCookie("data", JSON.stringify(user), { maxAge: 60 * 60 * 24 });
+        setuserData({ "email": user.email, "name": user.name });
+  
+        console.log(user);
+      } else {
+        alert('Unexpected response format.');
+      }
+  
+      setLoginData({
+        username: '',
+        password: '',
+      });
+    } catch (err) {
+      console.error(err);
+      alert('An error occurred during login. Please try again.');
     }
-      const user = result.message;
-      setCookie('usertoken',result.message.token,{ maxAge: 60 * 60 * 24});
-      setCookie("data",JSON.stringify(user),{ maxAge: 60 * 60 * 24})
-      setuserData({"email":user.email,"name": user.name})
-    console.log(result.message);
-    setLoginData({
-      username: '',
-      password: '',
-    })
-  }
-  catch(err){
-    console.log(err); 
-  }
+    setisUserClicked(false);
+    setIsregister(false);
   };
+  
    function logout(){
     if(session){
     signOut('google');
@@ -150,12 +174,11 @@ useEffect(()=>{
     )
     const result = await res.json();
     if(result.status === 200){
-
-      setisUserClicked(true);
-      setuserData(result.message.user)
+      const user = result.message;
+      setCookie('usertoken', user.token, { maxAge: 60 * 60 * 24 });
+        setCookie("data", JSON.stringify(user), { maxAge: 60 * 60 * 24 });
+        setuserData({ "email": user.email, "name": user.name });
     }
-    console.log(result.message);
-    localStorage.setItem('token',result?.message);
 
   };
   return (

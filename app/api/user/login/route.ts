@@ -21,7 +21,7 @@ export async function POST(req: Request) {
         const token = jwt.sign(
       { email: user.email},
       process.env.SECRET_KEY || 'Xb7wDALMRA',
-      { expiresIn: 60 * 120 } // Expires in 2 hours
+      { expiresIn: 60 * 1200 } // 
     );
 
     // Return the generated token
