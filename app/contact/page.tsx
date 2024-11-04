@@ -48,8 +48,8 @@ const Page = ()=> {
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">Get in Touch</h2>
             <p>Feel free to reach out for any inquiries or assistance.</p>
-            <p><strong>Address:</strong> 123 Your Street, Your City, Your Country</p>
-            <p><strong>Phone:</strong> (123) 456-7890</p>
+            <p><strong>Address:</strong> No.8, Gobalasammy Kovil Street,<br /> Ganapathy, Coimbatore - 641006 (SKT Promoters)</p>
+            <p><strong>Phone:</strong> +917942677809</p>
             <p><strong>Email:</strong> contact@yourcompany.com</p>
           </div>
 
