@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import React from 'react';
+import React, { lazy } from 'react';
 
 interface Product {
   name: string;
@@ -19,6 +19,7 @@ const Card = ({ name, image, description, price }: Product) => {
             style={{ objectFit: "contain" }}
             height={400}
             width={400}
+          
             alt={name}
             src={image}
             className="w-full transition-transform duration-300 group-hover:scale-105 md:h-56 h-[150px] object-cover"

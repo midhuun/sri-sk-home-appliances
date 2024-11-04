@@ -19,7 +19,10 @@ export default  function Category() {
     <>
     {isLoading && <Loading/>}
     {error && <Error/>}
-    <div className='lg:px-[5%] flex gap-4 flex-wrap'>
+    <h1 className="text-xl md:text-2xl lg:text-3xl flex justify-center font-bold text-center my-6 relative  double-underline dark:text-slate-200 text-gray-800 ">
+        {decodeURIComponent(category)}
+      </h1>
+    <div className='grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5'>
     {data?.message?.subcategories&& data?.message?.subcategories.map((sub:any)=>
     <Link key={sub._id} href={`/subcategory/${sub.name}`}>
     <CategoryCard  name={sub.name} image={sub.image} description={sub.description} />

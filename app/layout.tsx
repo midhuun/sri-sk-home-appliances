@@ -6,6 +6,7 @@ import Theme from "./context/ThemeContext";
 import Header from "./components/Header";
 import { SessionWrapper } from "./components/SessionWrapper";
 import ReduxProvider from "./store/provider";
+import Footer from "./components/Footer";
 const inter = Josefin_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -32,6 +33,7 @@ export default function RootLayout({
         </ReduxProvider>
         </Theme>
         </SessionWrapper>
+        <Footer/>
         </body>
    
     </html>

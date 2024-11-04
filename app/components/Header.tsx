@@ -453,7 +453,9 @@ useEffect(()=>{
           className="cursor-pointer"
           size={30}
         />
+        <Link href='/'>
         <Image height={100} width={100} className="md:w-10 md:h-10 h-8 w-8 rounded-full" alt="logo" src='/logo.png' />
+        </Link>
         </div>
        <div className="text-center hidden md:flex  flex-col items-center">
     <p className="font-extrabold text-xl md:text-[30px] tracking-wider text-blue-600">SK BRAND</p>
@@ -491,19 +493,27 @@ useEffect(()=>{
         >
           ✕
         </button> 
-        <div className="p-5">
-          <Link href='/' onClick={()=>setIsMenuOpen(false)} className=" transition-all duration-400"><h2 className="text-xl flex items-center gap-2 font-bold mb-7">
-            <Image src='/logo.png' className="h-8 w-8 rounded-full border" height={100} width={100} alt="logo" />
-            Home</h2></Link>
-          <ul className="space-y-4">
-           {data?.message?.categories?.map((category:Category)=>
-           <div key={category._id}>
-           <Link  href={`/categories/${category.name}`} >{category.name}</Link>
-           <hr className="py-2" />
-           </div>
-        )}
-          </ul>
-        </div>
+        <div className="">
+  <Link href="/" onClick={() => setIsMenuOpen(false)} className="transition-all flex  duration-400">
+    <h2 className="text-xl px-3 pt-5 flex items-center gap-2 font-bold mb-5">
+      <Image src="/logo.png" className="h-8 w-8 rounded-full border" height={100} width={100} alt="logo" />
+      Home
+    </h2>
+  </Link>
+  <ul className="">
+    {data?.message?.categories?.map((category: Category) => (
+      <div key={category._id} className="relative">
+        <Link
+          href={`/categories/${category.name}`}
+          className="flex uppercase !text-sm !font-normal pl-3  py-4 border-t  border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
+        >
+          {category.name}
+        </Link>
+      </div>
+    ))}
+  </ul>
+</div>
+
       </div>
       {isMenuOpen && (
         <div

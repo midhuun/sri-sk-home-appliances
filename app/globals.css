@@ -7,3 +7,14 @@
   max-height: 200px; /* Set the desired maximum height */
   overflow-y: auto; /* Enable vertical scrolling */
 }
+/* Double underline styling */
+.double-underline::after {
+  content: "";
+  position: absolute;
+  bottom: -2px; /* Position the line below the text */
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: currentColor; /* Use the current text color */
+   /* Creates a second underline */
+}

@@ -9,7 +9,8 @@ export default  function Home() {
   const fetcher = (url:any) => fetch(url).then((res)=>res.json());
 const { data, error, isLoading } = useSWR(
   `/api/user`,
-  fetcher
+  fetcher,{revalidateOnFocus: true,
+    refreshInterval: 30*1000,}
 );
   return (
     <>

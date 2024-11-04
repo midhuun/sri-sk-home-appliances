@@ -15,6 +15,7 @@ const Poster = () => {
         <Image
           height={500}
           width={500}
+          priority
           src="/fridgee.png"
           alt="Energy Efficient Refrigerator"
           className="w-[150px] h-[200px] md:w-[200px] md:h-[300px] lg:w-[250px] lg:h-[350px] rounded-lg shadow-lg"

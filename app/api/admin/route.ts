@@ -63,7 +63,8 @@ import { connectToDB } from '@/app/lib/db';
         $push: { subcategories: createdSubCategory },
       }, { new: true, useFindAndModify: false });
 
-    } else if (categoryName) {
+    } 
+    else if (categoryName) {
       await Category.create({
         name: categoryName,
         image: imageArr[0] || '', // Only the first image for category

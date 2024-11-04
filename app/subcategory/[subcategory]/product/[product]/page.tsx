@@ -16,7 +16,6 @@ const Page = () => {
   const { product }: any = useParams();
   const subName: any = decodeURIComponent(product);
   console.log(product);
-
   const fetcher = (url: any) => fetch(url).then((res) => res.json());
   const { data, error, isLoading } = useSWR(
     `/api/user/product/${subName}`,
@@ -44,7 +43,7 @@ const Page = () => {
         <div className='md:flex pt-7 px-4 md:pt-[20px] justify-center md:gap-7 space-y-4 '>
            <div className='md:flex flex-col items-center hidden space-y-4 pt-4'>
               {productdetails?.image.map((img: string, index: number) => (
-                <div key={index} className='cursor-pointer border ' onClick={() => setMainImage(img)}>
+                <div key={index} className='cursor-pointer border' onClick={() => setMainImage(img)}>
                   <Image 
                     src={img} 
                     width={300} 
